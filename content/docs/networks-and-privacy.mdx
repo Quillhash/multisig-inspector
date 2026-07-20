@@ -1,0 +1,48 @@
+---
+title: Networks and privacy
+description: Supported networks, external service boundaries, local storage, and deployment analytics.
+---
+
+## Supported networks
+
+The current application supports these mainnets:
+
+- Ethereum
+- Polygon
+- Arbitrum One
+- Optimism
+- Base
+- Gnosis Chain
+- BNB Smart Chain
+- Avalanche C-Chain
+
+These testnets are available after enabling testnet visibility:
+
+- Sepolia
+- Base Sepolia
+
+Mainnet auto-detection checks supported mainnets. For testnets, select the network before scanning or loading transactions.
+
+<Callout type="info" title="Updated from the source PDFs">
+The current UI does not accept an arbitrary custom RPC endpoint. Network support is limited to the configured chain registry and its fallback RPC URLs.
+</Callout>
+
+## Simulation support
+
+External GoPlus simulation is available only for:
+
+- Ethereum
+- BNB Smart Chain
+- Base
+
+Decoding, hash recomputation, and risk scoring do not require simulation.
+
+## Local data
+
+Safe configuration snapshots are stored in browser IndexedDB and are keyed by chain and Safe address. Transaction Inspector also stores the user's optional-feature toggle preferences in browser local storage.
+
+Clearing browser data removes these local snapshots and preferences. They are not synchronized between browsers or devices.
+
+## External data flows
+
+Safe queue imports, GoPlus simulation, online selector resolution, and RPC reads involve network requests. See [Security and trust model](/docs/security-model) for the exact boundary of each feature.

@@ -1,0 +1,42 @@
+---
+title: Frequently asked questions
+description: Concise answers about cost, wallet connections, storage, networks, hashes, reports, and product scope.
+---
+
+## Is it free?
+
+Yes. The current product has no account, sign-up, or paywall.
+
+## Do I connect a wallet?
+
+No. The application does not include a wallet connector and never requests signing keys.
+
+## Does it store Safe data?
+
+Configuration snapshots are stored locally in browser IndexedDB for drift comparison. The application has no report database. Network requests still occur for RPC reads and optional or import features described in the [security model](/docs/security-model).
+
+## Does a matching hash mean it is safe to sign?
+
+No. It confirms that the reviewed transaction fingerprint matches the signing fingerprint. You must also verify that every decoded action is authorized and intended.
+
+## Does a clean Safe report prove the Safe is secure?
+
+No. It reports known configuration risks. It cannot know whether owners are the right people, whether keys are stored safely, or whether governance procedures are being followed.
+
+## Which networks are supported?
+
+Eight mainnets and two testnets are currently configured. See [Networks and privacy](/docs/networks-and-privacy) for the exact list. Arbitrary custom RPC networks are not currently supported by the UI.
+
+## Can I inspect a transaction before it is proposed?
+
+Yes. Use Transaction Builder JSON or Manual Input. An unproposed local draft cannot be discovered from a Safe address.
+
+## Can I export results?
+
+Safe Inspector exports final reports as Markdown and JSON. Transaction Inspector provides its own analysis export from the result view where available.
+
+## How is this different from the Safe interface?
+
+It is a separate, read-only review surface. It focuses on direct configuration reads, independent transaction decoding and hash recomputation, local risk analysis, and an explicit human comparison before signing.
+
+

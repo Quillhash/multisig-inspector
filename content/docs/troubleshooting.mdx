@@ -1,0 +1,43 @@
+---
+title: Troubleshooting
+description: Resolve common scan, queue, simulation, RPC, snapshot, and hash-verification problems safely.
+---
+
+## No previous snapshot
+
+This is the first scan for this Safe and network in the current browser, or local site data was cleared. Complete the scan to establish a new baseline.
+
+## Drift is reported but nobody recognizes it
+
+Do not dismiss it. Trace the change to an authorized governance decision and the transaction that executed it. If it cannot be explained, treat the Safe as potentially compromised.
+
+## The Safe cannot be detected
+
+- Confirm that the input is the Safe address, not an owner or transaction address.
+- Select the network explicitly.
+- Testnets are not included in automatic mainnet detection.
+- Confirm that the selected network is one of the supported networks.
+
+## The queue is empty
+
+There may be no pending transactions. Confirm the network and Safe address. Unproposed Transaction Builder drafts are local to their creator and cannot be discovered from a Safe address; import the JSON export or enter the fields manually.
+
+## Safe Transaction Service import fails
+
+The service may be unavailable, rate-limited, or require authorization for an endpoint. Use the JSON or Manual Input tab as the independent fallback.
+
+## Simulation is unavailable
+
+GoPlus simulation is supported only on Ethereum, BNB Smart Chain, and Base, and it must be enabled explicitly. All local analysis remains available on other supported networks.
+
+## An unknown call is not decoded
+
+Enable **Resolve unknown calls online** if sharing the target address and selector with public directories is acceptable. Otherwise, verify the selector and ABI independently.
+
+## RPC errors or suspicious data
+
+Retry after a short interval and compare the result with a trusted block explorer or independent node. The current UI selects from configured RPC fallbacks; it does not accept a custom RPC URL.
+
+## The hash does not match
+
+Stop. Do not sign. Confirm the network, Safe address, nonce, target, value, calldata, operation, gas fields, refund receiver, and any other Safe transaction fields. A single difference produces a different SafeTxHash.

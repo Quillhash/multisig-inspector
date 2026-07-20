@@ -1,0 +1,144 @@
+{
+  "_comment": "Layer-0 address reputation — curated, versioned, fully local. Entries are keyed by lowercase address, grouped by chainId (0 = chain-agnostic). Source citations for auditability. Extend conservatively.",
+  "_version": "0.3.0",
+  "_lastUpdated": "2026-06-18",
+  "chainAgnostic": {
+    "knownGood": [
+      {
+        "address": "0x0000000000228f81e48edc897c47e3d8d0922a38",
+        "label": "Permit2 (Uniswap Universal Router)",
+        "source": "https://github.com/Uniswap/permit2"
+      }
+    ]
+  },
+  "1": {
+    "knownGood": [
+      {
+        "address": "0x7a250d5630b4cf539739df2c5dacb4c659f2488d",
+        "label": "Uniswap V2 Router 02",
+        "source": "https://docs.uniswap.org/contracts/v2/concepts/overview"
+      },
+      {
+        "address": "0x68b3465833fb72a70ecdf485e0e4c7bd8669fc56",
+        "label": "Uniswap V2 Router 02 (old, deprecated)",
+        "source": "https://docs.uniswap.org/contracts/v2/concepts/overview"
+      },
+      {
+        "address": "0xe592427a0aece92de3eddee1f18e0157c05861564",
+        "label": "Uniswap V3 SwapRouter 02",
+        "source": "https://docs.uniswap.org/contracts/v3/reference/deployments"
+      },
+      {
+        "address": "0x3fc91a3afd70395cd496c647d5a6cc9d4b2b7fad",
+        "label": "Uniswap Universal Router",
+        "source": "https://docs.uniswap.org/contracts/universal-router/overview"
+      },
+      {
+        "address": "0x7d2768de32db0db598a4d6e0a5e8a3ce6e416af2",
+        "label": "Aave V3 Pool",
+        "source": "https://docs.aave.com/developers/deployed-contracts/v3"
+      },
+      {
+        "address": "0x87870bca3f3fdfd03bd3eab488869bc6279cf5eb",
+        "label": "Aave V3 Pool (Lido wrapper)",
+        "source": "https://docs.aave.com/developers/deployed-contracts/v3"
+      },
+      {
+        "address": "0xae461caa67e5df3a0ab0650c0c0f33321e692aa2",
+        "label": "Aave V3 WETH Gateway",
+        "source": "https://docs.aave.com/developers/deployed-contracts/v3"
+      },
+      {
+        "address": "0x9ff58f4fbb29a268d2937b27737536e1cc320480",
+        "label": "Lido stETH",
+        "source": "https://docs.lido.fi/deployed-contracts/"
+      },
+      {
+        "address": "0x6f556588629b78ae3687ee4ec7e18e4f36b0a68e",
+        "label": "Rocket Pool Deposit",
+        "source": "https://docs.rocketpool.net/overview/deployed-contracts"
+      },
+      {
+        "address": "0xa5f9defdea3cbaabd712ed33bc2e40e8ed06a5b9",
+        "label": "Curve Exchange (ETH)",
+        "source": "https://.curve.fi/registry"
+      },
+      {
+        "address": "0xbebc44782c7db0a1a60cb6fe97d0b483032ff1c7",
+        "label": "Curve 3Pool",
+        "source": "https://curve.fi/registry"
+      }
+    ]
+  },
+  "10": {
+    "knownGood": [
+      {
+        "address": "0x7a250d5630b4cf539739df2c5dacb4c659f2488d",
+        "label": "Uniswap V2 Router 02 (Optimism)",
+        "source": "https://docs.uniswap.org/contracts/v2/concepts/overview"
+      },
+      {
+        "address": "0xe592427a0aece92de3eddee1f18e0157c05861564",
+        "label": "Uniswap V3 SwapRouter 02 (Optimism)",
+        "source": "https://docs.uniswap.org/contracts/v3/reference/deployments"
+      },
+      {
+        "address": "0xa23265285a8e8ee900a35e49e99e5cc0a29bdc04",
+        "label": "Aave V3 Pool (Optimism)",
+        "source": "https://docs.aave.com/developers/deployed-contracts/v3"
+      }
+    ]
+  },
+  "137": {
+    "knownGood": [
+      {
+        "address": "0xa5e0829caced8ffdd4de3c43696c57f7d7a678ff",
+        "label": "Uniswap V2 Router 02 (Polygon)",
+        "source": "https://docs.uniswap.org/contracts/v2/concepts/overview"
+      },
+      {
+        "address": "0x0c6f54a640b96110ec34c43aedc0fc6776cb1f5c",
+        "label": "Uniswap V3 SwapRouter 02 (Polygon)",
+        "source": "https://docs.uniswap.org/contracts/v3/reference/deployments"
+      },
+      {
+        "address": "0x794a61358d6845594f94dc1db02a252b27b23ee5",
+        "label": "Aave V3 Pool (Polygon)",
+        "source": "https://docs.aave.com/developers/deployed-contracts/v3"
+      }
+    ]
+  },
+  "42161": {
+    "knownGood": [
+      {
+        "address": "0x4752ba5dbcbd44c605f9518297e259f876269934",
+        "label": "Uniswap V2 Router 02 (Arbitrum)",
+        "source": "https://docs.uniswap.org/contracts/v2/concepts/overview"
+      },
+      {
+        "address": "0x68b3465833fb72a70ecdf485e0e4c7bd8669fc56",
+        "label": "Uniswap V3 SwapRouter 02 (Arbitrum)",
+        "source": "https://docs.uniswap.org/contracts/v3/reference/deployments"
+      },
+      {
+        "address": "0x82e64f04ed4e0f8cda6c0a4d71f195c2a8317a7a",
+        "label": "Aave V3 Pool (Arbitrum)",
+        "source": "https://docs.aave.com/developers/deployed-contracts/v3"
+      }
+    ]
+  },
+  "8453": {
+    "knownGood": [
+      {
+        "address": "0x8909dc15e40173ff4699353bfbf8f23e69b6f29d",
+        "label": "Uniswap V3 SwapRouter 02 (Base)",
+        "source": "https://docs.uniswap.org/contracts/v3/reference/deployments"
+      },
+      {
+        "address": "0xa238dd80c01b84a28ed62096810939c3c6100385",
+        "label": "Aave V3 Pool (Base)",
+        "source": "https://docs.aave.com/developers/deployed-contracts/v3"
+      }
+    ]
+  }
+}

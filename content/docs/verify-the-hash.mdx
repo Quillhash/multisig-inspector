@@ -1,0 +1,51 @@
+---
+title: Verify the hash before signing
+description: Compare the independently recomputed SafeTxHash with the value shown by the signing wallet.
+---
+
+The final hash comparison is the reason to perform an independent transaction review.
+
+## The workflow
+
+1. Load the transaction in Transaction Inspector.
+2. Read every decoded action and confirm the recipient, asset, amount, function, and operation.
+3. Find the recomputed **SafeTxHash** in the analysis.
+4. Begin reviewing the same transaction in the signing wallet.
+5. Compare the wallet's hash with the recomputed SafeTxHash character by character.
+6. Check the beginning, middle, and end - not only the first few characters.
+7. Sign only when the full values match and the decoded actions are approved.
+
+```text
+Transaction Inspector                  Signing wallet
+recomputes SafeTxHash                  displays transaction hash
+               \                      /
+                Do the values match?
+                  /              \
+                yes               no
+                 |                 |
+       confirm decoded intent      STOP - do not sign
+                 |
+          sign on the wallet
+```
+
+<Callout type="error" title="A mismatch is a stop condition">
+Do not work around or dismiss a hash mismatch. It means the transaction presented for signing is not the transaction represented by the independently reviewed fields, or that one side is computing a different payload.
+</Callout>
+
+## What a match proves
+
+A match confirms that the transaction fingerprint shown by the wallet agrees with the independently recomputed transaction fingerprint.
+
+It does **not** prove that:
+
+- The recipient is trustworthy.
+- The amount is appropriate.
+- The transaction was authorized by governance.
+- The decoded action is beneficial.
+- Future chain state will match a simulation.
+
+Always verify both: **the hash matches** and **the decoded actions are correct**.
+
+## Who should compare it?
+
+Every owner should perform the comparison when signing. The final signer or executor should repeat it immediately before execution. In smaller teams this may be the same person, but the rule remains: whenever a signature is about to be produced, verify the hash first.

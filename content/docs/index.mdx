@@ -1,0 +1,41 @@
+---
+title: Multisig Inspector
+description: A free, read-only security toolkit for reviewing Safe multisig configuration and transactions before signing.
+---
+
+Multisig Inspector helps teams answer two questions that contract audits alone cannot answer:
+
+1. **Is this Safe configured as intended, and has its configuration changed?**
+2. **What will this transaction do, and is the hash on the signing device the one that was independently reviewed?**
+
+The toolkit is designed to be used without connecting a wallet. It never requests private keys, creates signatures, or submits transactions.
+
+## Two tools, two human checks
+
+| Tool | What it does | What only you can do |
+| --- | --- | --- |
+| **Safe Inspector** | Reads owners, threshold, modules, guard, fallback handler, implementation, version, and nonce directly from the selected network. It reports risks and configuration drift. | Confirm that every owner and configuration choice belongs there. |
+| **Transaction Inspector** | Decodes a transaction, recomputes its Safe transaction hashes, and optionally simulates it. | Confirm the decoded intent and compare the recomputed hash with the signing screen. |
+
+<Callout type="info" title="The last security step is human">
+The tool can produce an independent expectation, but it cannot see a hardware wallet or signing interface. Before signing, compare the displayed hash character by character.
+</Callout>
+
+## Why this exists
+
+Safe smart contracts are extensively audited. Many real losses happen in the operational gap between creating a transaction and a signer approving it: a misleading interface, an altered payload, an unexpected owner, a lowered threshold, or a newly enabled module.
+
+Multisig Inspector focuses on that gap. It exposes the configuration and transaction data that a human reviewer needs before approving anything.
+
+## Start here
+
+<Cards>
+  <Card title="Run your first review" href="/docs/getting-started" description="The shortest path through both inspectors." />
+  <Card title="Review a Safe" href="/docs/safe-inspector" description="Understand configuration, findings, owner review, and drift." />
+  <Card title="Review a transaction" href="/docs/transaction-inspector" description="Choose an import path, decode actions, and verify hashes." />
+  <Card title="Understand the trust model" href="/docs/security-model" description="See exactly what stays local and what can leave the browser." />
+</Cards>
+
+## Scope
+
+Multisig Inspector reviews current Safe configuration and individual transactions. It does not replace a full security audit of transaction history, signer operations, governance, or key-management practices.

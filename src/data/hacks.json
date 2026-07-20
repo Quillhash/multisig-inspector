@@ -1,0 +1,102 @@
+[
+  {
+    "id": "humanity-protocol",
+    "name": "Humanity Protocol",
+    "date": "2026-06",
+    "lossDisplay": "$36M",
+    "lossUsd": 36000000,
+    "vector": "3-of-6 and 3-of-5 keys were all on one laptop; attacker built an offline Safe transaction for a malicious bridge upgrade.",
+    "verdict": "partially",
+    "verdictCopy": "Tool can't detect key co-location, but transaction/implementation drift monitoring would surface the malicious bridge upgrade and implementation change — with alerting, possibly in time to react."
+  },
+  {
+    "id": "stablr-eurr",
+    "name": "StablR (EURR)",
+    "date": "2026-05",
+    "lossDisplay": "$10M minted (~$3M realized)",
+    "lossUsd": 10000000,
+    "vector": "Minting multisig had a 1-of-3 threshold; one compromised key gave full control.",
+    "verdict": "yes",
+    "verdictCopy": "Clean catch. This is exactly what Safe Inspector flags: 'threshold of 1 removes multisig protection' is a stock High finding. A single scan at any point pre-hack would have surfaced it."
+  },
+  {
+    "id": "superfortune-ai",
+    "name": "SuperFortune AI",
+    "date": "2026-05",
+    "lossDisplay": "$5.66M",
+    "lossUsd": 5660000,
+    "vector": "Attacker modified the airdrop destination address to a lookalike (0x70AE678b457C5E1b3fD7AD9537F234dFc1795C15 instead of 0x70ae7D3DECfB4C3aE996fb1c07092566F73D5c15).",
+    "verdict": "yes",
+    "verdictCopy": "Clean catch. Transaction Inspector reveals the exact destination address in the decoded calldata, exposing lookalike substitutions before a signer approves."
+  },
+  {
+    "id": "drift-protocol",
+    "name": "Drift Protocol",
+    "date": "2026-04",
+    "lossDisplay": "$285M",
+    "lossUsd": 285000000,
+    "vector": "Signers were socially engineered into pre-signing hidden authorizations; zero-timelock council migration.",
+    "verdict": "no",
+    "verdictCopy": "Solana / Drift is out of scope today. The underlying issue was socially engineered pre-signing, which no on-chain tool can prevent once signers approve."
+  },
+  {
+    "id": "resolv-labs",
+    "name": "Resolv Labs (USR)",
+    "date": "2026-03",
+    "lossDisplay": "$80M",
+    "lossUsd": 80000000,
+    "vector": "Single insufficiently protected key enabled unauthorized minting at scale.",
+    "verdict": "partially",
+    "verdictCopy": "Not a signing-review failure, but a Safe-Inspector-style config scan would flag single-key control over minting (equivalent of a threshold-1 finding) before the hack, if anyone ran it."
+  },
+  {
+    "id": "step-finance",
+    "name": "Step Finance",
+    "date": "2026-01",
+    "lossDisplay": "$27M",
+    "lossUsd": 27000000,
+    "vector": "Executive device compromise; keys drained from a Solana multisig.",
+    "verdict": "no",
+    "verdictCopy": "Solana / Squads is out of scope today. This case supports expanding chain support in future."
+  },
+  {
+    "id": "upcx",
+    "name": "UPCX",
+    "date": "2025-04",
+    "lossDisplay": "$70M",
+    "lossUsd": 70000000,
+    "vector": "Leaked admin key led to a malicious ProxyAdmin upgrade.",
+    "verdict": "partially",
+    "verdictCopy": "Not a Safe-signing failure, but implementation/upgrade monitoring of the pattern this tool checks would have flagged the ProxyAdmin change instantly."
+  },
+  {
+    "id": "infini",
+    "name": "Infini",
+    "date": "2025-02",
+    "lossDisplay": "$49.5M",
+    "lossUsd": 49500000,
+    "vector": "Retained developer admin privileges were abused.",
+    "verdict": "partially",
+    "verdictCopy": "A Safe-Inspector-style privilege review ('is this owner/role expected?') is precisely the check that would surface a leftover privileged address."
+  },
+  {
+    "id": "bybit",
+    "name": "Bybit",
+    "date": "2025-02",
+    "lossDisplay": "$1.4–1.5B",
+    "lossUsd": 1450000000,
+    "vector": "Compromised Safe{Wallet} UI; signers blind-signed a delegatecall that swapped the Safe's masterCopy.",
+    "verdict": "yes",
+    "verdictCopy": "Flagship case. Independent decode would have shown a delegatecall + implementation change instead of a routine transfer; recomputing the SafeTxHash on a clean device would not match the intended transaction. Exactly the gap this tool targets."
+  },
+  {
+    "id": "radiant-capital",
+    "name": "Radiant Capital",
+    "date": "2024-10",
+    "lossDisplay": "$50M",
+    "lossUsd": 50000000,
+    "vector": "Compromised signer devices showed a benign transaction while the actual payload transferred pool ownership.",
+    "verdict": "partially",
+    "verdictCopy": "Decoding on a clean second device would reveal the ownership-transfer call. Caveat: the devices themselves were compromised, so verification had to happen off those machines."
+  }
+]

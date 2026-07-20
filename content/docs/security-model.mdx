@@ -1,0 +1,47 @@
+---
+title: Security and trust model
+description: Understand what the product guarantees, which operations are local, and where external trust boundaries remain.
+---
+
+The product is read-only and intentionally separated from signing.
+
+## Core guarantees
+
+| Guarantee | Current behavior |
+| --- | --- |
+| **RPC: Direct** | Safe configuration and enrichment reads go from the browser to configured public RPC endpoints through `viem`. There is no Safe SDK in the scan path. |
+| **Signing: Never** | The app has no wallet connector, does not request keys, and does not create, sign, queue, execute, or broadcast transactions. |
+| **Snapshots: Local** | Configuration snapshots are stored in IndexedDB in the current browser. There is no application database for scan reports. |
+
+<Callout type="warn" title="Direct RPC is still a trust boundary">
+A public RPC can be unavailable, stale, or dishonest. The application uses configured fallback endpoints, but users with stronger assurance requirements should independently verify critical state with a trusted node or block explorer.
+</Callout>
+
+## What runs locally
+
+- Safe configuration processing and risk evaluation
+- Configuration snapshot comparison
+- Transaction normalization and decoding
+- EIP-712 domain, message, and SafeTxHash computation
+- Report generation and downloads
+
+## What may leave the browser
+
+| Feature | When | Data path |
+| --- | --- | --- |
+| RPC reads | During Safe scans and transaction enrichment | Browser to configured public RPC endpoints |
+| Safe transaction import | Safe Address or Safe URL mode | Browser to the application's read-only proxy, then Safe Transaction Service |
+| GoPlus simulation | Only when explicitly enabled | Browser to application server route, then GoPlus |
+| Unknown-call resolution | Only when explicitly enabled | Target address and selector to the application route, then Sourcify or a public signature directory |
+
+## No signing authority
+
+The application cannot move funds because it never holds signing material and has no transaction submission flow. This limits impact if the web application itself is compromised, but it does not make a compromised display trustworthy. Always verify the transaction on the signing device.
+
+## Limitations
+
+- It reviews current configuration and individual transactions, not the full operational security program.
+- Simulations are point-in-time estimates.
+- A compromised browser can misrepresent what it renders.
+- A malicious RPC can misrepresent chain state.
+- Hash matching confirms payload identity, not business approval.

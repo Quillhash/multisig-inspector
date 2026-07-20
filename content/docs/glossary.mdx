@@ -1,0 +1,28 @@
+---
+title: Glossary
+description: Definitions for the Safe configuration, transaction, RPC, hashing, and review terms used throughout the product.
+---
+
+| Term | Meaning |
+| --- | --- |
+| Safe | A smart-account wallet that can require multiple owner approvals before execution. |
+| Owner / signer | An address authorized to approve Safe transactions. |
+| Threshold | The number of owner confirmations required for execution. |
+| Module | A contract authorized to execute through the Safe without the normal owner-signature flow. |
+| Guard | An optional contract that checks Safe transactions before or after execution. |
+| Fallback handler | A helper contract used for supported fallback interactions and signature behavior. |
+| Singleton / implementation / mastercopy | The implementation contract whose logic the Safe proxy executes. |
+| Nonce | A counter used to order transactions and prevent replay. |
+| RPC | A network endpoint used to read blockchain state and submit read-only calls. |
+| EIP-712 | A standard for hashing typed structured data for signing. |
+| Domain hash | The EIP-712 hash binding typed data to a domain such as chain and verifying contract. |
+| Message hash | The hash of the structured Safe transaction fields. |
+| SafeTxHash | The final Safe transaction fingerprint owners approve. |
+| Calldata | Encoded function and argument data sent to a contract. |
+| Delegatecall | An operation that executes target code in the calling Safe's storage context. |
+| Local draft | A transaction prepared locally but not yet proposed to the Safe Transaction Service. |
+| Awaiting signatures | A proposed transaction that has fewer confirmations than the threshold. |
+| Ready to execute | A proposed transaction with enough confirmations to meet its threshold. |
+| Configuration drift | A difference between the current configuration and the latest snapshot stored in the browser. |
+| Simulation | A point-in-time preview of a transaction's possible effects. |
+| Signing wallet | The wallet or device that displays and approves a transaction signature. |

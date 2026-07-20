@@ -1,0 +1,68 @@
+export const safeAbi = [
+  {
+    type: "function",
+    name: "getOwners",
+    stateMutability: "view",
+    inputs: [],
+    outputs: [{ type: "address[]" }],
+  },
+  {
+    type: "function",
+    name: "getThreshold",
+    stateMutability: "view",
+    inputs: [],
+    outputs: [{ type: "uint256" }],
+  },
+  {
+    type: "function",
+    name: "nonce",
+    stateMutability: "view",
+    inputs: [],
+    outputs: [{ type: "uint256" }],
+  },
+  {
+    type: "function",
+    name: "getModulesPaginated",
+    stateMutability: "view",
+    inputs: [
+      { name: "start", type: "address" },
+      { name: "pageSize", type: "uint256" },
+    ],
+    outputs: [{ type: "address[]" }, { type: "address" }],
+  },
+  {
+    type: "function",
+    name: "VERSION",
+    stateMutability: "view",
+    inputs: [],
+    outputs: [{ type: "string" }],
+  },
+  {
+    type: "function",
+    name: "execTransaction",
+    stateMutability: "payable",
+    inputs: [
+      { name: "to", type: "address" },
+      { name: "value", type: "uint256" },
+      { name: "data", type: "bytes" },
+      { name: "operation", type: "uint8" },
+      { name: "safeTxGas", type: "uint256" },
+      { name: "baseGas", type: "uint256" },
+      { name: "gasPrice", type: "uint256" },
+      { name: "gasToken", type: "address" },
+      { name: "refundReceiver", type: "address" },
+      { name: "signatures", type: "bytes" },
+    ],
+    outputs: [{ type: "bool" }],
+  },
+  {
+    type: "function",
+    name: "approvedHashes",
+    stateMutability: "view",
+    inputs: [
+      { name: "owner", type: "address" },
+      { name: "hash", type: "bytes32" },
+    ],
+    outputs: [{ type: "uint256" }],
+  },
+] as const;

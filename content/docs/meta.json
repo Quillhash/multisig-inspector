@@ -1,0 +1,16 @@
+{
+  "title": "Multisig Inspector",
+  "pages": [
+    "index",
+    "getting-started",
+    "safe-inspector",
+    "transaction-inspector",
+    "verify-the-hash",
+    "security-model",
+    "networks-and-privacy",
+    "operating-routine",
+    "troubleshooting",
+    "faq",
+    "glossary"
+  ]
+}

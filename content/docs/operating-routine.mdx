@@ -1,0 +1,44 @@
+---
+title: Recommended operating routine
+description: Turn Safe reviews and transaction verification into a repeatable security procedure.
+---
+
+Security controls that rely on someone remembering to be careful eventually fail. Make these reviews part of the treasury procedure.
+
+## For every transaction
+
+1. Import or manually enter the transaction in Transaction Inspector.
+2. Review the decoded actions against the approved intent.
+3. Investigate any delegatecall, administration action, unknown call, or reputation warning.
+4. Confirm the recomputed hash agrees with any imported hash.
+5. Compare the SafeTxHash with the signing wallet before producing a signature.
+
+## Weekly or monthly
+
+1. Scan every production Safe from the same controlled browser used for prior baselines.
+2. Review all configuration drift.
+3. Compare owners against the current access roster.
+4. Confirm the threshold against governance policy.
+5. Export a report after completing the owner review.
+
+## Before and after configuration changes
+
+Before adding or removing an owner, changing a threshold, or enabling a module or guard:
+
+1. Scan the Safe to create a fresh baseline.
+2. Approve and execute the intended configuration transaction using the transaction-review workflow.
+3. Scan again.
+4. Confirm that the expected field changed and nothing else did.
+
+## Signer onboarding and offboarding
+
+Scan immediately after changing signer access. Confirm that the new owner is correct, removed owners no longer appear, and the threshold still matches policy.
+
+## When drift is unexplained
+
+Treat unexplained drift as a potential incident:
+
+1. Identify the exact changed fields.
+2. Locate the governance approval and on-chain transaction that caused them.
+3. Confirm the change with the responsible owners through an independent communication channel.
+4. If the change cannot be explained, stop routine signing and begin the incident-response process.

@@ -1,0 +1,69 @@
+---
+title: Safe Inspector
+description: Review a Safe's on-chain configuration, risk findings, owner context, and changes since the previous scan.
+---
+
+Safe Inspector reads the selected Safe directly from configured public RPC endpoints. It does not connect a wallet or use the Safe SDK for configuration reads.
+
+## Run a scan
+
+1. Paste the Safe address or a supported Safe URL.
+2. Choose a network, or leave it empty to auto-detect supported mainnets.
+3. Select **Scan Safe**.
+4. Confirm the resolved network before reviewing the result.
+
+The same address can exist on multiple networks with unrelated owners and configuration. If multiple deployments are detected, choose the intended network explicitly.
+
+## Configuration checks
+
+| Setting | Review question | Why it matters |
+| --- | --- | --- |
+| Owners | Do you recognize every address? | Any owner can participate in approvals. A stale or unknown owner is a serious risk. |
+| Threshold | Does it match governance policy? | A threshold of 1 removes multisig protection. A threshold equal to owner count removes redundancy. |
+| Modules | Was each module intentionally enabled? | Modules can execute without the normal owner threshold. |
+| Guard | Is the guard expected and reviewed? | A guard can enforce policy, but a malicious or broken guard can block transactions. |
+| Fallback handler | Is it canonical or intentionally customized? | Unexpected handlers deserve investigation. |
+| Implementation | Is it a canonical Safe singleton for this network? | A malicious implementation controls the wallet's behavior. |
+| Version | Is the detected version expected? | Older or unexpected versions may require review. |
+| Nonce | Does it fit the expected transaction state? | The nonce orders Safe transactions and prevents replay. |
+
+## Owner review
+
+The scanner can identify owner addresses, but cannot know which people or systems should control the treasury. Work through these questions:
+
+- Is every listed owner recognized?
+- Is any expected owner missing?
+- Has anyone left the organization or rotated a key?
+- Is any owner a contract, and is that intentional?
+- Does the threshold match the approved policy?
+
+An unknown owner is a human finding: the software cannot infer your organization chart.
+
+## Findings and severities
+
+| Severity | Meaning |
+| --- | --- |
+| Critical | Immediate compromise path or a fundamentally untrusted implementation. |
+| High | A serious weakness such as single-owner control or unexpected privileged configuration. |
+| Medium | A notable condition that needs review, such as no approval redundancy or non-standard components. |
+| Low / Info | Context, version notes, or unusual but not necessarily unsafe configuration. |
+
+A finding is context, not a verdict. Modules, guards, and contract owners may be legitimate. Verify them against the organization's approved design.
+
+## Configuration drift
+
+After each scan, the app saves a configuration snapshot in IndexedDB in the current browser. A later scan of the same Safe and network compares the new configuration with the latest local snapshot.
+
+Drift can include:
+
+- Owner additions or removals
+- Threshold changes
+- Module changes
+- Guard or fallback handler changes
+- Implementation changes
+
+Snapshots are browser- and device-specific. Clearing site data removes them. A different browser starts with no baseline.
+
+## Exporting a report
+
+After completing the owner review, export the report as Markdown or JSON. The export records the configuration, findings, reviewer responses, and scan block for governance evidence. It is a point-in-time report, not continuous monitoring.

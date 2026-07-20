@@ -1,0 +1,61 @@
+---
+title: Transaction Inspector
+description: Import, decode, and independently verify a Safe transaction before signing or execution.
+---
+
+Transaction Inspector makes the actual actions and hashes of a Safe transaction reviewable. Decoding, Safe hash computation, and risk scoring run locally by default.
+
+## Choose an import path
+
+### Safe Address
+
+Paste a Safe address, Safe home URL, or supported Safe transaction URL. The app uses the Safe Transaction Service through a read-only proxy to list queued transactions or resolve the URL.
+
+Imported fields are treated as untrusted. The app normalizes them and independently recomputes the SafeTxHash wherever the required fields are available.
+
+The queue groups transactions into:
+
+- **Local drafts** - not discoverable from a Safe address; import Transaction Builder JSON or enter fields manually.
+- **Awaiting signatures** - proposed transactions below the required threshold.
+- **Ready to execute** - proposed transactions that reached the required confirmation threshold.
+- **History** - the latest executed transactions, available from the queue view.
+
+### JSON
+
+Paste a Safe transaction JSON object. This is useful for Transaction Builder exports or data obtained independently of the Safe web interface. Select a network if the JSON does not include `chainId`.
+
+### Manual Input
+
+Enter the Safe address, target, value, calldata, operation, nonce, and optional verification fields yourself. This is the most independent path because no transaction service supplies the transaction fields.
+
+## What the analysis shows
+
+### Decoded actions
+
+The decoder exposes the effect hidden inside calldata. For example, an ERC-20 transfer sends zero native currency to the token contract while the real recipient and amount are encoded inside the call.
+
+Delegatecalls are highlighted because they execute another contract's code in the Safe's context. Nested MultiSend actions and known Safe administration actions are expanded where supported.
+
+### Hash verification
+
+The app computes the EIP-712 domain hash, message hash, and SafeTxHash from the normalized fields. If an imported SafeTxHash is present, the result shows whether it matches the recomputed value.
+
+### Safe context and projected changes
+
+The app enriches the transaction with current Safe configuration and chain data where available. It surfaces relevant owner, threshold, nonce, balance, and administrative changes.
+
+## Optional external features
+
+### GoPlus simulation
+
+Simulation is opt-in and supported only on Ethereum, BNB Chain, and Base. Transaction fields are sent to the application's server route and then to GoPlus. A simulation reflects current chain state and can differ from execution-time state.
+
+Delegatecall simulation is inherently limited: the external provider may simulate the target as a normal call and cannot fully reproduce execution in the Safe's storage context. Treat it as a weak signal.
+
+### Resolve unknown calls online
+
+When enabled, the app sends only the target address and unknown 4-byte selector to public ABI/signature directories. It checks Sourcify first and uses a public 4-byte signature database as a fallback.
+
+## What a clean result means
+
+A clean decode and matching hash establish what transaction was reviewed. They do not decide whether the organization should approve it. Confirm both the intended actions and the hash shown by the signing wallet.

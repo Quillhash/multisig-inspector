@@ -1,0 +1,50 @@
+---
+title: Getting started
+description: Scan a Safe or analyze a transaction in about a minute, without connecting a wallet.
+---
+
+## Before you start
+
+Have the following ready:
+
+- The **Safe address**, not an owner address or transaction hash.
+- The network where the Safe is deployed. Mainnets can often be detected automatically; testnets must be selected.
+- For a transaction review, either the Safe address or URL, transaction JSON, or the raw transaction fields.
+
+You do **not** need a wallet connection, private key, seed phrase, API key, or account.
+
+<Callout type="warn" title="Never enter signing secrets">
+Multisig Inspector never asks for a private key or seed phrase. If a page using this name asks for one, stop immediately.
+</Callout>
+
+## Safe Inspector: 60-second workflow
+
+1. Open **Safe Inspector**.
+2. Paste a Safe address or a supported Safe URL.
+3. Optionally choose the network. If you leave it empty, the app searches supported mainnets.
+4. Select **Scan Safe**.
+5. Review the detected network and on-chain configuration.
+6. Confirm every owner yourself.
+7. Answer the owner-review questions to generate the final findings.
+8. Optionally export the report as Markdown or JSON.
+
+## Transaction Inspector: 60-second workflow
+
+1. Open **Transaction Inspector**.
+2. Choose an import method: **Safe Address**, **JSON**, or **Manual Input**.
+3. Load or enter the transaction.
+4. Select a queued transaction when using Safe Address mode.
+5. Read the decoded actions, risk findings, hash verification, and known limitations.
+6. If signing, compare the recomputed SafeTxHash with the hash shown by the signing wallet.
+
+Optional external simulation and online call resolution are off by default. Enable them only after reading what data they send outside the browser.
+
+## What success looks like
+
+A successful review is not merely a green result. You should be able to state:
+
+- Every owner is expected.
+- The threshold matches policy.
+- Every module, guard, handler, and implementation is understood.
+- The decoded transaction matches the approved intent.
+- The SafeTxHash matches the signing screen exactly.
