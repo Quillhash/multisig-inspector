@@ -3,10 +3,11 @@
  *
  * NEXT_PUBLIC_SITE_URL must be the public URL the app is served from, without a
  * trailing slash. It may include a path prefix when the app is mounted under
- * one (for example https://www.quillaudits.com/multisig-inspector).
+ * one. The marketing page at www.quillaudits.com/multisig-inspector is a
+ * separate app; this tool is served from its own subdomain.
  */
 export const SITE_URL = (
-  process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.quillaudits.com/multisig-inspector"
+  process.env.NEXT_PUBLIC_SITE_URL ?? "https://multisiginspector.quillaudits.com"
 ).replace(/\/+$/, "");
 
 export const SITE_NAME = "Multisig Inspector";
