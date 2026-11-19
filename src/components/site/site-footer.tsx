@@ -1,5 +1,6 @@
+import Image from "next/image";
 import Link from "next/link";
-import { PUBLISHER_NAME, PUBLISHER_URL, SITE_NAME } from "@/lib/seo/site";
+import { PUBLISHER_URL } from "@/lib/seo/site";
 
 const columns = [
   {
@@ -28,57 +29,56 @@ const columns = [
       { label: "Glossary", href: "/docs/glossary" },
     ],
   },
+  {
+    title: "QuillAudits",
+    links: [
+      { label: "QuillAudits home", href: PUBLISHER_URL },
+      { label: "OPSEC and Multisig Audit", href: `${PUBLISHER_URL}/opsec-and-multisig-audit` },
+      { label: "Smart Contract Audit", href: `${PUBLISHER_URL}/smart-contract-audit` },
+      { label: "Brand kit", href: `${PUBLISHER_URL}/brandkit` },
+    ],
+  },
 ] as const;
 
+/** Reduced QuillAudits footer slab for the standalone tool. */
 export function SiteFooter() {
   return (
-    <footer className="mt-auto border-t border-rule bg-surface">
-      <div className="mx-auto grid max-w-[1200px] gap-10 px-5 py-12 md:grid-cols-[1.4fr_repeat(3,1fr)] lg:px-6">
-        <div>
-          <p className="text-base font-semibold tracking-tight">{SITE_NAME}</p>
-          <p className="mt-2 max-w-[34ch] text-sm leading-relaxed text-muted">
-            A free, read-only toolkit for reviewing Safe multisig configuration
-            and transactions before signing.
-          </p>
-          <p className="mt-4 text-sm text-muted">
-            Built by{" "}
-            <a
-              href={PUBLISHER_URL}
-              target="_blank"
-              rel="noopener"
-              className="font-semibold text-foreground underline decoration-rule-strong underline-offset-4 hover:decoration-accent"
-            >
-              {PUBLISHER_NAME}
-            </a>
-          </p>
-        </div>
+    <footer className="qa-panel qa-footer mt-2 mb-2">
+      <div className="qa-footer__top">
+        <a href={PUBLISHER_URL} aria-label="QuillAudits">
+          <Image src="/branding/quillaudits-logo.svg" alt="QuillAudits" width={148} height={24} />
+        </a>
+        <p className="qa-small max-w-[44ch] text-right max-sm:hidden">
+          Multisig Inspector is a free, read-only tool by QuillAudits.
+        </p>
+      </div>
+      <div className="qa-footer__cols">
         {columns.map((column) => (
-          <nav key={column.title} aria-label={column.title}>
-            <p className="text-xs font-semibold tracking-[0.08em] text-muted-faint uppercase">
-              {column.title}
-            </p>
-            <ul className="mt-3 space-y-2.5">
+          <nav key={column.title} className="qa-footer__col" aria-label={column.title}>
+            <p className="qa-footer__title">{column.title}</p>
+            <ul>
               {column.links.map((link) => (
                 <li key={link.href}>
-                  <Link
-                    href={link.href}
-                    className="text-sm text-muted transition-colors hover:text-foreground"
-                  >
-                    {link.label}
-                  </Link>
+                  {link.href.startsWith("http") ? (
+                    <a href={link.href} className="qa-footer__link">
+                      {link.label}
+                    </a>
+                  ) : (
+                    <Link href={link.href} className="qa-footer__link">
+                      {link.label}
+                    </Link>
+                  )}
                 </li>
               ))}
             </ul>
           </nav>
         ))}
       </div>
-      <div className="border-t border-rule">
-        <p className="mx-auto max-w-[1200px] px-5 py-5 text-xs leading-relaxed text-muted-faint lg:px-6">
-          Read-only analysis. Multisig Inspector never connects a wallet, signs
-          or submits transactions. A clean result is not a guarantee of safety.
-          Released under the MIT license.
-        </p>
-      </div>
+      <p className="qa-footer__bottom">
+        Read-only analysis. Multisig Inspector never connects a wallet, signs or
+        submits transactions. A clean result is not a guarantee of safety.
+        Released under the MIT license. © QuillAudits.
+      </p>
     </footer>
   );
 }

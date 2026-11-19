@@ -23,7 +23,7 @@ export function TransactionResult({ result, resolveEnabled = false }: { result: 
             <p className="eyebrow">Transaction Integrity</p>
             <h2 className="mt-1 text-xl font-bold">{integrityLabel(result.hashCheck.status)}</h2>
           </div>
-          <span className="rounded border border-rule px-2.5 py-1 text-xs font-semibold uppercase">{result.input.source}</span>
+          <span className="rounded-lg border border-rule px-2.5 py-1 text-xs font-semibold uppercase">{result.input.source}</span>
         </div>
         <p className="mt-2 text-sm text-muted">{integrityExplanation(result.hashCheck.status)}</p>
         {result.hashCheck.recomputedSafeTxHash ? (
@@ -52,7 +52,7 @@ export function TransactionResult({ result, resolveEnabled = false }: { result: 
       {priorityFindings.length ? (
         <ResultCard className="border-critical/40">
           <h2 className="text-lg font-bold">Priority Findings</h2>
-          <div className="mt-3 space-y-3">{priorityFindings.map((finding, index) => <div key={`${finding.title}-${index}`}><div className={cn("font-semibold", finding.severity === "critical" || finding.severity === "high" ? "text-critical" : "text-medium")}>{finding.title}</div><p className="mt-1 text-sm text-muted">{finding.plainEnglish}</p><p className="mt-1 text-sm font-medium">{finding.recommendation}</p></div>)}</div>
+          <div className="mt-3 space-y-3">{priorityFindings.map((finding, index) => <div key={`${finding.title}-${index}`}><div className={cn("font-semibold", finding.severity === "critical" || finding.severity === "high" ? "text-critical" : "text-warning")}>{finding.title}</div><p className="mt-1 text-sm text-muted">{finding.plainEnglish}</p><p className="mt-1 text-sm font-medium">{finding.recommendation}</p></div>)}</div>
         </ResultCard>
       ) : null}
 
@@ -101,7 +101,7 @@ export function TransactionResult({ result, resolveEnabled = false }: { result: 
       <ResultCard>
         <h2 className="text-lg font-bold">Recommendation</h2>
         <p className="mt-2 text-sm leading-relaxed text-muted">{result.recommendation}</p>
-        {result.limitations.map((item) => <p key={item} className="mt-2 text-sm text-medium">⚠ {item}</p>)}
+        {result.limitations.map((item) => <p key={item} className="mt-2 text-sm text-warning">⚠ {item}</p>)}
         <div className="mt-4 flex flex-wrap gap-2">
           <Button variant="secondary" onClick={() => download("transaction-inspector.md", createXRayMarkdown(result), "text/markdown")}><Download className="h-4 w-4" />Export Markdown</Button>
           <Button variant="secondary" onClick={() => download("transaction-inspector.json", createXRayJson(result), "application/json")}><FileJson className="h-4 w-4" />Export JSON</Button>
@@ -137,7 +137,7 @@ function SimulationCard({ simulation }: { simulation: NonNullable<XRayResult["si
       <h2 className={cn("mt-1 text-lg font-bold", ok ? "text-success" : simulation.status === "reverted" ? "text-critical" : "text-muted")}>{label}</h2>
       {simulation.revertReason ? <p className="mt-1 break-all font-mono text-xs text-critical">{simulation.revertReason}</p> : null}
       {simulation.note ? <p className="mt-1 text-xs text-muted">{simulation.note}</p> : null}
-      {simulation.advisory ? <p className="mt-2 rounded-md border border-medium/40 bg-warning-soft p-2 text-xs text-medium">{simulation.advisory}</p> : null}
+      {simulation.advisory ? <p className="mt-2 rounded-2xl border border-warning-border bg-warning-soft p-2 text-xs text-warning">{simulation.advisory}</p> : null}
       <div className="mt-3 grid gap-2 text-sm sm:grid-cols-2">
         <Change label="Result" value={ok ? "Call succeeded" : simulation.status === "reverted" ? "Call reverted" : "Unavailable"} />
         <Change label="Gas used" value={simulation.gasUsed ?? "Not reported"} />
@@ -171,7 +171,7 @@ function TransactionDataCard({ input }: { input: XRayResult["input"] }) {
         <Technical label="Destination" value={input.to} />
         <Technical label="Native value" value={input.value} />
       </dl>
-      <details className="glass-chip mt-4 rounded-md border p-3">
+      <details className="glass-chip mt-4 rounded-2xl border p-3">
         <summary className="cursor-pointer text-sm font-semibold">Show raw calldata</summary>
         <p className="mt-2 text-xs leading-relaxed text-muted">This is the calldata the Safe forwards to the destination contract — the &quot;Data&quot; field shown in the Safe app, not the final broadcast payload.</p>
         <p className="mt-3 break-all font-mono text-xs text-muted">{input.data}</p>
@@ -223,23 +223,23 @@ function integrityExplanation(status: XRayResult["hashCheck"]["status"]) {
 }
 function reputationBadge(reputation?: AddressReputation) {
   if (!reputation || reputation.status === "unknown") return null;
-  if (reputation.status === "known_good") return <span className="ml-2 rounded border border-success-border/50 bg-success-soft px-1.5 py-0.5 text-[10px] font-semibold text-success" title={reputation.source}>✓ {reputation.label ?? "known"}</span>;
-  return <span className="ml-2 rounded border border-critical/50 bg-critical-soft px-1.5 py-0.5 text-[10px] font-semibold text-critical" title={reputation.source}>⚠ {reputation.label ?? "suspicious"}</span>;
+  if (reputation.status === "known_good") return <span className="ml-2 rounded-lg border border-success-border/50 bg-success-soft px-1.5 py-0.5 text-[10px] font-semibold text-success" title={reputation.source}>✓ {reputation.label ?? "known"}</span>;
+  return <span className="ml-2 rounded-lg border border-critical/50 bg-critical-soft px-1.5 py-0.5 text-[10px] font-semibold text-critical" title={reputation.source}>⚠ {reputation.label ?? "suspicious"}</span>;
 }
 function ResultCard({ children, className }: { children: React.ReactNode; className?: string }) { return <Card className={cn("p-5", className)}>{children}</Card>; }
-function Change({ label, value }: { label: string; value: string }) { return <div className="rounded-md bg-accent-soft p-3"><div className="text-xs font-semibold text-muted">{label}</div><div className="mt-1 break-all font-mono text-xs">{value}</div></div>; }
+function Change({ label, value }: { label: string; value: string }) { return <div className="rounded-2xl bg-accent-soft p-3"><div className="text-xs font-semibold text-muted">{label}</div><div className="mt-1 break-all font-mono text-xs">{value}</div></div>; }
 function Technical({ label, value }: { label: string; value: string }) { return <div><dt className="font-semibold">{label}</dt><dd className="mt-1 break-all font-mono text-xs text-muted">{value}</dd></div>; }
 function Action({ action, resolveEnabled = false }: { action: XRayResult["actions"][number]; resolveEnabled?: boolean }) {
   const symbol = action.amountFormatted?.split(" ").at(-1);
   const tokenLabel = action.tokenName && symbol && action.tokenName !== symbol ? `${action.tokenName} (${symbol})` : action.tokenName;
   const isUnresolvedUnknown = action.type === "unknown_contract_call" && action.reputation?.status !== "known_good";
   return (
-    <div className="rounded-md border border-rule p-3">
+    <div className="rounded-2xl border border-rule p-3">
       <div className="font-semibold">{action.title}{reputationBadge(action.reputation)}{resolutionBadge(action.resolutionNote)}</div>
       {tokenLabel && action.tokenExplorerUrl ? <a className="mt-1 inline-block text-sm font-semibold text-accent underline underline-offset-2" href={action.tokenExplorerUrl} target="_blank" rel="noopener noreferrer">{tokenLabel}</a> : null}
       <p className="mt-1 text-sm text-muted">{action.plainEnglish}</p>
       {isUnresolvedUnknown ? (
-        <p className="mt-1 text-xs font-medium text-medium">
+        <p className="mt-1 text-xs font-medium text-warning">
           {resolveEnabled
             ? "Online resolution could not decode this call. Manual review is required; check the contract on a block explorer."
             : "Manual review is required. Tip: turn on \"Resolve unknown calls online\" to try decoding this call."}
@@ -254,8 +254,8 @@ function Action({ action, resolveEnabled = false }: { action: XRayResult["action
 function resolutionBadge(note: DecodedAction["resolutionNote"]) {
   if (!note) return null;
   if (note === "verified-abi") {
-    return <span className="ml-2 rounded bg-emerald-500/15 px-1.5 py-0.5 text-[10px] font-semibold text-emerald-600" title="Decoded from the contract's verified ABI on Sourcify.">verified ABI</span>;
+    return <span className="ml-2 rounded-lg bg-emerald-500/15 px-1.5 py-0.5 text-[10px] font-semibold text-emerald-600" title="Decoded from the contract's verified ABI on Sourcify.">verified ABI</span>;
   }
-  return <span className="ml-2 rounded bg-amber-500/15 px-1.5 py-0.5 text-[10px] font-semibold text-amber-600" title="Function name resolved from a public 4-byte signature database. Selector collisions are possible — confirm against the contract.">unverified signature</span>;
+  return <span className="ml-2 rounded-lg bg-amber-500/15 px-1.5 py-0.5 text-[10px] font-semibold text-amber-600" title="Function name resolved from a public 4-byte signature database. Selector collisions are possible — confirm against the contract.">unverified signature</span>;
 }
 function download(name: string, content: string, type: string) { const url = URL.createObjectURL(new Blob([content], { type })); const anchor = document.createElement("a"); anchor.href = url; anchor.download = name; anchor.click(); URL.revokeObjectURL(url); }

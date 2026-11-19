@@ -1,6 +1,6 @@
 "use client";
 
-import { Check, Download, FileJson, Loader2, Search } from "lucide-react";
+import { Download, FileJson, Loader2, Search } from "lucide-react";
 import { useEffect, useMemo, useState, type ReactNode } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
@@ -212,97 +212,95 @@ export function SafeInspectorApp({ children }: { children?: ReactNode }) {
     <>
       <SiteHeader />
 
-      <section className="hero-ink">
-        <div className="mx-auto max-w-[1200px] px-5 pt-14 pb-12 sm:pt-20 sm:pb-16 lg:px-6">
-          <div className="page-enter mx-auto max-w-[820px] text-center">
-            <p className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.06] px-3.5 py-1.5 text-xs font-medium text-white/80">
-              <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" aria-hidden="true" />
-              Free and read-only. No wallet connection.
-            </p>
-            <h1 className="mt-6 text-[clamp(2.1rem,5.4vw,3.75rem)] leading-[1.04] font-semibold tracking-[-0.035em] text-balance">
-              Check any Safe multisig{" "}
-              <span className="hero-accent">before you sign</span>
-            </h1>
-            <p className="mx-auto mt-5 max-w-[60ch] text-[1.02rem] leading-relaxed text-white/70 text-pretty">
-              Multisig Inspector reads a Safe (Gnosis Safe) straight from the
-              chain and flags risky owners, thresholds, modules and guards. It
-              tracks configuration drift between scans and exports the report
-              as audit evidence.
-            </p>
-          </div>
+      <section id="main" className="qa-container qa-hero qa-hero--split qa-hero--tight page-enter">
+        <div>
+          <p className="qa-eyebrow qa-eyebrow--hero">Multisig Inspector</p>
+          <h1 className="qa-h1 qa-h1--product mt-4">
+            Check any Safe multisig{" "}
+            <span className="qa-accent">before you sign.</span>
+          </h1>
+          <p className="qa-body-lg mt-6">
+            Multisig Inspector is a free, read-only scanner by QuillAudits. It
+            reads a Safe (Gnosis Safe) straight from the chain, flags risky
+            owners, thresholds, modules and guards, and tracks configuration
+            drift between scans.
+          </p>
+          <ul className="qa-trust mt-8">
+            <li>
+              <strong>No</strong> wallet connection
+            </li>
+            <li>
+              <strong>Never</strong> signs
+            </li>
+            <li>
+              <strong>Direct</strong> RPC reads
+            </li>
+          </ul>
+        </div>
 
+        <div className="qa-frame page-enter page-enter-delay-1">
           <form
-            className="page-enter page-enter-delay-1 mx-auto mt-9 max-w-[920px] rounded-2xl bg-surface p-3 text-foreground shadow-[0_24px_60px_rgba(0,0,0,0.35)] sm:p-4"
+            className="border border-rule bg-background p-5 text-left sm:p-7"
             onSubmit={(event) => {
               event.preventDefault();
               scanMutation.mutate();
             }}
           >
-            <div className="grid items-end gap-3 md:grid-cols-[230px_1fr_auto]">
-              <div>
-                <span className="text-xs font-semibold text-muted">
-                  Network <span className="font-normal text-muted-faint">(auto-detected)</span>
-                </span>
-                <NetworkSelect value={chainId} onChange={setChainId} ariaLabel="Network" />
-              </div>
+            <h2 className="qa-h3">Scan a Safe</h2>
 
-              <label className="block min-w-0">
-                <span className="text-xs font-semibold text-muted">Safe address or URL</span>
-                <input
-                  className={cn(inputClassName, "h-11 font-mono text-[0.82rem]")}
-                  placeholder="0x…  ·  eth:0x…  ·  Safe or explorer URL"
-                  value={safeAddress}
-                  onChange={(event) => setSafeAddress(event.target.value)}
-                  autoComplete="off"
-                  autoCapitalize="off"
-                  spellCheck={false}
-                  inputMode="url"
-                />
-              </label>
-
-              <Button
-                className="h-11 w-full rounded-[10px] px-6 disabled:opacity-60 md:w-auto"
-                disabled={scanMutation.isPending || !safeAddress.trim()}
-                type="submit"
-              >
-                {scanMutation.isPending ? (
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                ) : (
-                  <Search className="h-4 w-4" />
-                )}
-                {scanMutation.isPending ? "Scanning" : "Scan Safe"}
-              </Button>
+            <div className="mt-5">
+              <span className="qa-label mb-0!">
+                Network <span className="font-medium text-muted-faint">(optional, auto-detected)</span>
+              </span>
+              <NetworkSelect value={chainId} onChange={setChainId} ariaLabel="Network" />
             </div>
+
+            <label className="mt-4 block">
+              <span className="qa-label mb-0!">Safe address or URL</span>
+              <input
+                className={cn(inputClassName, "qa-mono text-sm")}
+                placeholder="0x…, eth:0x… or a Safe app URL"
+                value={safeAddress}
+                onChange={(event) => setSafeAddress(event.target.value)}
+                autoComplete="off"
+                autoCapitalize="off"
+                spellCheck={false}
+                inputMode="url"
+              />
+            </label>
+
+            <Button
+              className="mt-5 w-full"
+              size="lg"
+              disabled={scanMutation.isPending || !safeAddress.trim()}
+              type="submit"
+            >
+              {scanMutation.isPending ? (
+                <Loader2 className="h-5 w-5 animate-spin" />
+              ) : (
+                <Search className="h-5 w-5" />
+              )}
+              {scanMutation.isPending ? "Scanning" : "Scan Safe"}
+            </Button>
+            <p className="qa-small mt-4 text-center">
+              Free. No sign-up. 8 mainnets supported.
+            </p>
 
             {scanError ? (
               <div
                 role="alert"
-                className="mt-3 rounded-[10px] border border-critical-border bg-critical-soft p-3 text-sm text-critical"
+                className="mt-4 rounded-2xl border border-high bg-surface p-4 text-sm text-foreground"
               >
                 <div className="font-semibold">{scanError.title}</div>
-                <p className="mt-1 leading-relaxed">{scanError.message}</p>
+                <p className="mt-1 leading-relaxed text-muted">{scanError.message}</p>
                 {scanError.help ? (
-                  <p className="mt-2 text-[0.8rem] leading-relaxed text-critical/80">
+                  <p className="mt-2 text-[0.8rem] leading-relaxed text-muted-faint">
                     {scanError.help}
                   </p>
                 ) : null}
               </div>
             ) : null}
           </form>
-
-          <ul className="page-enter page-enter-delay-2 mx-auto mt-6 flex max-w-[920px] flex-wrap items-center justify-center gap-x-6 gap-y-2 text-[0.8rem] text-white/60">
-            {[
-              "Direct RPC reads",
-              "Never signs or submits",
-              "No backend database",
-              "Snapshots stay in your browser",
-            ].map((item) => (
-              <li key={item} className="inline-flex items-center gap-1.5">
-                <Check className="h-3.5 w-3.5 text-emerald-400" aria-hidden="true" />
-                {item}
-              </li>
-            ))}
-          </ul>
         </div>
       </section>
 
@@ -310,7 +308,7 @@ export function SafeInspectorApp({ children }: { children?: ReactNode }) {
         <main
           id="report"
           aria-live="polite"
-          className="mx-auto w-full max-w-[1200px] scroll-mt-20 px-5 py-8 lg:px-6"
+          className="qa-container pt-16"
         >
           {result && !finalReport ? (
             <OwnerVerificationCard
@@ -327,10 +325,7 @@ export function SafeInspectorApp({ children }: { children?: ReactNode }) {
                   </div>
                   <ScoreRing score={finalReport.score} />
                   <div
-                    className={cn(
-                      "inline-block rounded-full px-3 py-1.5 text-[0.733rem] font-semibold",
-                      scoreLabelClass(finalReport.score),
-                    )}
+                    className={scoreLabelClass(finalReport.score)}
                   >
                     {scoreLabel(finalReport.score)}
                   </div>
@@ -352,7 +347,7 @@ export function SafeInspectorApp({ children }: { children?: ReactNode }) {
                     </strong>{" "}
                     · block {finalReport.snapshot.blockNumber.toString()}
                   </div>
-                  <div className="mt-4 grid max-w-[420px] grid-cols-3 overflow-hidden rounded-[10px] border border-rule">
+                  <div className="mt-4 grid max-w-[420px] grid-cols-3 overflow-hidden rounded-xl border border-rule">
                     <HeroStat label="Owners" value={heroOwners} />
                     <HeroStat label="Threshold" value={heroThreshold} />
                     <HeroStat label="Findings" value={heroFindings} />
@@ -390,7 +385,7 @@ export function SafeInspectorApp({ children }: { children?: ReactNode }) {
 
               <div className="grid items-start gap-3 lg:grid-cols-[180px_1fr]">
                 <nav
-                  className="glass-panel hidden flex-col gap-0.5 rounded-[12px] border p-2 lg:sticky lg:top-20 lg:flex"
+                  className="glass-panel hidden flex-col gap-0.5 rounded-3xl border p-2 lg:sticky lg:top-28 lg:flex"
                   aria-label="Report sections"
                 >
                   <SectionNavLink
@@ -432,10 +427,10 @@ export function SafeInspectorApp({ children }: { children?: ReactNode }) {
                           />
                         ))}
                         {hiddenFindings.length ? (
-                          <div className="rounded-md border border-rule bg-accent-soft p-4">
+                          <div className="rounded-2xl border border-rule bg-accent-soft p-4">
                             <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
                               <div>
-                                <div className="text-[0.867rem] font-semibold">
+                                <div className="text-[0.867rem] font-semibold text-foreground">
                                   {hiddenFindings.length} more technical
                                   findings
                                 </div>
@@ -475,8 +470,8 @@ export function SafeInspectorApp({ children }: { children?: ReactNode }) {
                   </ReportSection>
 
                   <ReportSection id="owners" title="Owner review">
-                    <div className="rounded-md border border-rule bg-accent-soft p-4">
-                      <div className="text-[0.867rem] font-semibold">
+                    <div className="rounded-2xl border border-rule bg-accent-soft p-4">
+                      <div className="text-[0.867rem] font-semibold text-foreground">
                         {ownerReviewLabels[finalReport.ownerReview.answer]}
                       </div>
                       <div className="mt-3 space-y-2">
@@ -551,10 +546,10 @@ export function SafeInspectorApp({ children }: { children?: ReactNode }) {
                         {finalReport.changes.map((change, index) => (
                           <div
                             key={`${change.type}-${index}`}
-                            className="rounded-md border border-rule p-4"
+                            className="rounded-2xl border border-rule p-4"
                           >
                             <div className="flex items-center justify-between gap-3">
-                              <div className="font-semibold">{change.title}</div>
+                              <div className="font-semibold text-foreground">{change.title}</div>
                               <SeverityBadge severity={change.severity} />
                             </div>
                             <div className="mt-2 break-all font-mono text-[0.733rem] text-muted">
@@ -619,7 +614,7 @@ function SectionNavLink({
         });
       }}
       className={cn(
-        "block rounded-md border-l-2 px-2.5 py-2 text-[0.8rem] font-medium text-muted transition",
+        "block rounded-2xl border-l-2 px-2.5 py-2 text-[0.8rem] font-medium text-muted transition",
         active
           ? "border-accent bg-accent-soft font-semibold text-accent"
           : "border-transparent hover:bg-accent-soft hover:text-foreground",
@@ -638,8 +633,9 @@ function SectionNavLink({
 function ScoreRing({ score }: { score: number }) {
   const offset =
     SCORE_RING_CIRCUMFERENCE - (score / 100) * SCORE_RING_CIRCUMFERENCE;
-  const strokeColor =
-    score >= 80 ? "#103DD3" : score >= 50 ? "#FF7428" : "#960028";
+  // The ring is always Quill Core. What the score means is said in words
+  // beside it; severity colours belong to individual findings.
+  const strokeColor = "#103DD3";
 
   return (
     <div className="relative mx-auto h-[104px] w-[104px]">
@@ -653,7 +649,7 @@ function ScoreRing({ score }: { score: number }) {
           cy="52"
           r={SCORE_RING_RADIUS}
           fill="none"
-          stroke="#e3e3df"
+          stroke="#DDDDDD"
           strokeWidth="8"
         />
         <circle
@@ -669,7 +665,7 @@ function ScoreRing({ score }: { score: number }) {
         />
       </svg>
       <div className="absolute inset-0 flex flex-col items-center justify-center">
-        <span className="text-[1.6rem] leading-none font-bold tracking-tight">
+        <span className="font-display text-[1.75rem] leading-none font-bold text-foreground">
           {score}
         </span>
         <span className="mt-0.5 text-[0.65rem] text-muted-faint">/ 100</span>
@@ -717,7 +713,7 @@ function OwnerVerificationCard({
           I am not sure
         </Button>
       </div>
-      <div className="mt-4 rounded-md bg-accent-soft p-3.5 text-[0.8rem] leading-relaxed text-accent">
+      <div className="mt-4 rounded-2xl bg-accent-soft p-3.5 text-[0.8rem] leading-relaxed text-accent">
         RPC scan complete at block {blockNumber}. Confirm owners to generate the
         full security report.
       </div>
@@ -727,7 +723,7 @@ function OwnerVerificationCard({
 
 function OwnerRow({ address, index }: { address: string; index: number }) {
   return (
-    <div className="flex items-center gap-3 rounded-md border border-rule bg-accent-soft px-3 py-2.5">
+    <div className="flex items-center gap-3 rounded-2xl border border-rule bg-accent-soft px-3 py-2.5">
       <span className="w-5 shrink-0 font-mono text-[0.667rem] font-medium text-muted-faint">
         {String(index).padStart(2, "0")}
       </span>
@@ -746,7 +742,7 @@ function ReportSection({
   children: React.ReactNode;
 }) {
   return (
-    <Card id={id} className="scroll-mt-[5rem] p-5">
+    <Card id={id} className="scroll-mt-28 p-5">
       <h2 className="mb-4 border-b border-rule pb-3 text-[0.8rem] font-bold tracking-[0.06em] text-foreground uppercase">
         {title}
       </h2>
@@ -757,10 +753,10 @@ function ReportSection({
 
 function FindingCard({ finding }: { finding: RiskFinding }) {
   return (
-    <div className="rounded-md border border-rule p-4">
+    <div className="rounded-2xl border border-rule p-4">
       <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
         <div>
-          <h3 className="font-semibold tracking-tight">{finding.title}</h3>
+          <h3 className="text-lg font-semibold text-foreground">{finding.title}</h3>
           <div className="mt-1 text-[0.75rem] text-muted-faint">
             {finding.category} · {finding.confidence} confidence
           </div>
@@ -774,7 +770,7 @@ function FindingCard({ finding }: { finding: RiskFinding }) {
         {finding.recommendation}
       </p>
       {finding.relatedIncident ? (
-        <div className="mt-3 rounded-md border border-rule bg-accent-soft p-3.5 text-[0.8rem]">
+        <div className="mt-3 rounded-2xl border border-rule bg-accent-soft p-3.5 text-[0.8rem]">
           <div className="font-semibold">
             Similar risk pattern: {finding.relatedIncident.name}
           </div>
@@ -792,7 +788,7 @@ function FindingCard({ finding }: { finding: RiskFinding }) {
         </p>
       </details>
       {finding.evidence ? (
-        <pre className="mt-3 overflow-x-auto rounded-md bg-accent-soft p-3 font-mono text-[0.733rem] leading-relaxed text-muted">
+        <pre className="mt-3 overflow-x-auto rounded-2xl bg-accent-soft p-3 font-mono text-[0.733rem] leading-relaxed text-muted">
           {formatEvidence(finding.evidence)}
         </pre>
       ) : null}
@@ -801,18 +797,11 @@ function FindingCard({ finding }: { finding: RiskFinding }) {
 }
 
 function SeverityBadge({ severity }: { severity: RiskFinding["severity"] }) {
+  // Brand severity colours fail contrast as small text, so the colour is a
+  // swatch and the label stays Ledger Black.
   return (
-    <span
-      className={cn(
-        "inline-flex shrink-0 rounded px-2 py-1 text-[0.667rem] font-bold tracking-[0.05em] uppercase",
-        severity === "critical" && "bg-[#fce8ee] text-critical",
-        severity === "high" && "bg-[#fde8e8] text-high",
-        severity === "medium" && "bg-[#fff0e6] text-medium",
-        severity === "low" && "bg-[#fff6e8] text-low",
-        severity === "info" && "bg-[#f3e8ff] text-info",
-      )}
-    >
-      {severity}
+    <span className={cn("qa-sev shrink-0 text-[0.8rem] capitalize", `qa-sev--${severity}`)}>
+      {severity === "info" ? "Informational" : severity}
     </span>
   );
 }
@@ -829,7 +818,7 @@ function ConfigItem({
   mono?: boolean;
 }) {
   return (
-    <div className="rounded-md border border-rule bg-accent-soft p-3.5">
+    <div className="rounded-2xl border border-rule bg-accent-soft p-3.5">
       <div className="text-[0.667rem] font-semibold tracking-[0.05em] text-muted-faint uppercase">
         {label}
       </div>
@@ -868,7 +857,7 @@ function formatClassification(
 
 function EmptyState({ text }: { text: string }) {
   return (
-    <div className="rounded-md border border-rule bg-accent-soft p-4 text-[0.867rem] text-muted">
+    <div className="rounded-2xl border border-rule bg-accent-soft p-4 text-[0.867rem] text-muted">
       {text}
     </div>
   );
@@ -888,14 +877,14 @@ function scoreLabel(score: number): string {
 
 function scoreLabelClass(score: number): string {
   if (score >= 80) {
-    return "bg-accent-soft text-accent";
+    return "qa-tag qa-tag--light";
   }
 
   if (score >= 50) {
-    return "bg-[#fff0e6] text-medium";
+    return "qa-tag qa-tag--light qa-tag--caution";
   }
 
-  return "bg-[#fce8ee] text-critical";
+  return "qa-tag border-critical-border bg-critical-soft text-critical";
 }
 
 function downloadText(fileName: string, content: string, type: string) {

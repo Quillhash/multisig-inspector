@@ -17,8 +17,8 @@ export function TabBar<T extends string>({
           role="tab"
           aria-selected={active === tab.value}
           className={cn(
-            "rounded-lg px-3 py-2 text-sm font-medium whitespace-nowrap transition-colors",
-            active === tab.value ? "bg-foreground text-white" : "text-muted hover:bg-background hover:text-foreground",
+            "h-10 rounded-full px-4 text-sm font-semibold whitespace-nowrap transition-colors",
+            active === tab.value ? "bg-surface text-foreground" : "text-muted hover:text-foreground",
           )}
           onClick={() => onChange(tab.value)}
         >

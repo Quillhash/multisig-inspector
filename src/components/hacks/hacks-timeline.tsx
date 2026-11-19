@@ -100,7 +100,7 @@ export function HacksTimeline() {
         {grouped.map(([year, incidents]) => (
           <section key={year} className="relative">
             <div className="mb-6 flex items-center gap-4">
-              <span className="inline-flex h-10 w-16 items-center justify-center rounded-full border border-rule bg-surface text-sm font-bold text-foreground shadow-sm">
+              <span className="inline-flex h-10 w-16 items-center justify-center rounded-full border border-rule bg-surface text-sm font-bold text-foreground">
                 {year}
               </span>
               <div className="h-px flex-1 bg-rule" />
@@ -145,13 +145,13 @@ function IncidentCard({
       ref={ref}
       data-id={hack.id}
       className={cn(
-        "glass-panel relative border border-l-4 p-5 lg:p-6",
+        "glass-panel relative border border-l-4 p-5 [overflow-wrap:anywhere] *:min-w-0 lg:p-6",
         colors.border,
       )}
     >
       <span
         className={cn(
-          "absolute -left-[21px] top-6 h-3.5 w-3.5 rounded-full border-2 border-surface shadow-sm lg:-left-[25px]",
+          "absolute -left-[21px] top-6 h-3.5 w-3.5 rounded-full border-2 border-background lg:-left-[25px]",
           colors.dot,
         )}
       />
@@ -161,13 +161,13 @@ function IncidentCard({
           <time dateTime={hack.date} className="text-[0.7rem] font-bold uppercase tracking-[0.12em] text-muted-faint">
             {hack.date}
           </time>
-          <h2 className="mt-1 text-[1.35rem] font-semibold leading-tight tracking-tight">
+          <h2 className="qa-h3 mt-1">
             {hack.name}
           </h2>
         </div>
 
         <div className="flex flex-col items-start gap-2 lg:items-end">
-          <span className="text-[1.6rem] font-bold leading-none text-critical">
+          <span className="font-display text-[1.75rem] font-bold leading-none text-[#E53030]">
             {hack.lossDisplay}
           </span>
           <span className="text-[0.65rem] font-bold uppercase tracking-[0.1em] text-muted-faint">
@@ -184,7 +184,7 @@ function IncidentCard({
         </div>
       </div>
 
-      <div className="mt-5 grid gap-4 md:grid-cols-2">
+      <div className="mt-5 grid grid-cols-[minmax(0,1fr)] gap-4 md:grid-cols-2">
         <div>
           <p className="text-[0.65rem] font-bold uppercase tracking-[0.1em] text-muted-faint">
             Attack vector
@@ -219,7 +219,7 @@ function GriftCounter({
 
   return (
     <div className="fixed bottom-5 left-5 z-40 w-[min(16rem,calc(100vw-2.5rem))]">
-      <div className="glass-panel border p-4 !shadow-[var(--shadow-pop)]">
+      <div className="rounded-2xl border border-rule bg-surface p-4 shadow-[var(--shadow-pop)]">
         <div className="flex items-center gap-3">
           <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-critical-soft text-critical">
             <Flame className="h-4 w-4" />

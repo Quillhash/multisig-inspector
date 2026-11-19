@@ -264,21 +264,19 @@ function TransactionXRayAppContent({
   return (
     <div className="text-foreground">
       <SiteHeader active="xray" />
-      <section className="hero-ink">
-        <div className="page-enter mx-auto max-w-[1200px] px-5 py-12 lg:px-6">
-          <p className="eyebrow">Pre-signing review</p>
-          <h1 className="mt-3 max-w-[22ch] text-[clamp(1.9rem,4.2vw,2.9rem)] leading-[1.06] font-semibold tracking-[-0.03em] text-balance">Decode and verify a Safe transaction <span className="hero-accent">before signing</span></h1>
-          <p className="mt-4 max-w-2xl text-base leading-relaxed text-white/70">Transaction Inspector shows what a Safe transaction changes and recomputes its hash so you can match it against your signing device. Decoding, hash verification, and reputation checks run locally by default.</p>
-        </div>
+      <section className="qa-container qa-hero qa-hero--tight page-enter">
+        <p className="qa-eyebrow qa-eyebrow--hero qa-center-mobile">Transaction Inspector</p>
+        <h1 className="qa-h1 qa-h1--product qa-center-mobile mt-4 max-w-[24ch] max-lg:mx-auto">Decode and verify a Safe transaction <span className="qa-accent">before signing.</span></h1>
+        <p className="qa-body-lg qa-center-mobile mt-6 max-w-[64ch] text-muted max-lg:mx-auto">Transaction Inspector shows what a Safe transaction changes and recomputes its hash so you can match it against your signing device. Decoding, hash verification, and reputation checks run locally by default.</p>
       </section>
-      <main className="page-enter page-enter-delay-1 mx-auto grid max-w-[1200px] items-start gap-5 px-5 py-8 lg:grid-cols-[390px_1fr] lg:px-6">
-        <aside className="space-y-3 lg:sticky lg:top-20 lg:self-start">
+      <main id="main" className="qa-container page-enter page-enter-delay-1 grid items-start gap-4 pt-12 pb-24 lg:grid-cols-[400px_1fr]">
+        <aside className="space-y-3 lg:sticky lg:top-28 lg:self-start">
         <Card>
           <TabBar tabs={modeTabs} active={mode} onChange={switchMode} />
           <div className="p-4">
             {mode === "manual" ? <Manual chainId={chainId} setChainId={setChainId} value={manual} setValue={setManual} /> : mode === "json" ? (
               <div className="space-y-3">
-                <label className="block text-sm font-semibold">Network <span className="font-normal text-muted">(if JSON omits chainId)</span><NetworkSelect value={chainId} onChange={(nextChainId) => { setChainId(nextChainId); setJsonNetworkError(""); }} className={jsonNetworkError ? "rounded-md ring-2 ring-critical/25" : undefined} />{jsonNetworkError ? <span className="mt-1.5 block text-xs font-medium text-critical">{jsonNetworkError}</span> : null}</label>
+                <label className="block text-sm font-semibold">Network <span className="font-normal text-muted">(if JSON omits chainId)</span><NetworkSelect value={chainId} onChange={(nextChainId) => { setChainId(nextChainId); setJsonNetworkError(""); }} className={jsonNetworkError ? "rounded-2xl ring-2 ring-critical/25" : undefined} />{jsonNetworkError ? <span className="mt-1.5 block text-xs font-medium text-critical">{jsonNetworkError}</span> : null}</label>
                 <label className="block text-sm font-semibold">Safe address <span className="font-normal text-muted">(required if JSON omits it)</span><input aria-label="JSON Safe address" aria-invalid={Boolean(jsonSafeError)} className={`${inputClass} ${jsonSafeError ? "border-critical/50 bg-critical-soft ring-2 ring-critical/15" : ""}`} value={jsonSafeAddress} onChange={(event) => { setJsonSafeAddress(event.target.value); setJsonSafeError(""); }} placeholder="0x..." />{jsonSafeError ? <span className="mt-1.5 block text-xs font-medium text-critical">{jsonSafeError}</span> : null}</label>
                 <label className="block text-sm font-semibold">Safe transaction JSON<textarea aria-label="Safe transaction JSON" className={`${inputClass} h-56 py-3 font-mono text-xs`} value={json} onChange={(event) => updateJson(event.target.value)} /></label>
               </div>
@@ -306,7 +304,7 @@ function TransactionXRayAppContent({
               {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Search className="h-4 w-4" />}
               {importButtonLabel}
             </Button>
-            {error ? <p role="alert" className="mt-3 rounded-md border border-critical/30 bg-critical-soft p-3 text-sm text-critical">{error}</p> : null}
+            {error ? <p role="alert" className="mt-3 rounded-2xl border border-critical/30 bg-critical-soft p-3 text-sm text-critical">{error}</p> : null}
             {/* Layer-1 external enrichment controls */}
             <Layer1Controls
               enabled={layer1Enabled}
@@ -340,8 +338,8 @@ function TransactionXRayAppContent({
                 }}
               />
           ) : (
-            <div className="glass-panel flex min-h-[28rem] flex-col items-center justify-center gap-3 rounded-[12px] border px-6 py-10 text-center">
-              <div className="mb-1 grid h-14 w-14 place-items-center rounded-[12px] border border-dashed border-rule-strong bg-background text-muted-faint">
+            <div className="glass-panel flex min-h-[28rem] flex-col items-center justify-center gap-3 rounded-3xl border px-6 py-10 text-center">
+              <div className="mb-1 grid h-14 w-14 place-items-center rounded-3xl border border-dashed border-rule-strong bg-background text-muted-faint">
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden>
                   <path d="M4 7h16M4 12h10M4 17h14" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
                   <circle cx="18" cy="12" r="2" stroke="currentColor" strokeWidth="1.5" />
@@ -361,7 +359,7 @@ function TransactionXRayAppContent({
 function ResolveControls({ enabled, setEnabled }: { enabled: boolean; setEnabled: (value: boolean) => void }) {
   const toggleId = "resolve-unknown-toggle";
   return (
-    <div className="glass-chip mt-3 rounded-md border p-3">
+    <div className="glass-chip mt-3 rounded-2xl border p-3">
       <div className="flex items-center justify-between gap-3">
         <label htmlFor={toggleId} className="min-w-0 break-words text-sm font-semibold">
           <span className="sm:hidden">Resolve unknown calls</span>
@@ -391,7 +389,7 @@ function LoadingPanel({ mode }: { mode: Mode }) {
       ? "Fetching the Safe queue and signature status…"
       : "Decoding, verifying the hash, and scoring risk locally…";
   return (
-    <div className="glass-panel flex min-h-[28rem] flex-col items-center justify-center gap-3 rounded-[12px] border px-6 py-10 text-center">
+    <div className="glass-panel flex min-h-[28rem] flex-col items-center justify-center gap-3 rounded-3xl border px-6 py-10 text-center">
       <div className="scan-orb mb-1 grid h-[4.5rem] w-[4.5rem] place-items-center rounded-full border-2 border-rule bg-accent-soft text-accent">
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden>
           <path d="M4 6h16v12H4z" stroke="currentColor" strokeWidth="1.5" />
@@ -470,7 +468,7 @@ function Layer1Controls(props: {
   const supported = isSimulationSupportedChain(props.chainId);
   const toggleId = "external-analysis-toggle";
   return (
-    <div className="glass-chip mt-5 rounded-md border p-3">
+    <div className="glass-chip mt-5 rounded-2xl border p-3">
       <div className="flex items-center justify-between gap-3">
         <label htmlFor={toggleId} className="min-w-0 break-words text-sm font-semibold">
           <span className="sm:hidden">GoPlus simulation</span>
@@ -485,7 +483,7 @@ function Layer1Controls(props: {
         />
       </div>
       {props.enabled && supported ? (
-        <div className="mt-3 rounded-md border border-accent/20 bg-accent-soft p-3">
+        <div className="mt-3 rounded-2xl border border-accent/20 bg-accent-soft p-3">
           <p className="text-xs leading-relaxed text-muted">
             Off by default. When enabled, transaction fields are sent to GoPlus only for a current-state dry run. Provider credentials remain server-side, and results remain in memory until refresh.
           </p>

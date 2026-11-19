@@ -14,7 +14,7 @@ export function Card({
     <section
       id={id}
       className={cn(
-        "glass-panel rounded-[12px] border",
+        "glass-panel border",
         className,
       )}
     >

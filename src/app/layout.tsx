@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import localFont from "next/font/local";
 import {
   DEFAULT_DESCRIPTION,
   PUBLISHER_NAME,
@@ -10,17 +10,23 @@ import {
 import { pageMetadata } from "@/lib/seo/metadata";
 import "./globals.css";
 
-const geistSans = Geist({
-  subsets: ["latin"],
-  variable: "--font-geist-sans",
+// Brand fonts, self-hosted so builds need no network: Bai Jamjuree for body
+// and UI, Chakra Petch 700 for page and section titles only.
+const baiJamjuree = localFont({
+  variable: "--font-baijamjuree",
   display: "swap",
+  src: [
+    { path: "./fonts/bai-jamjuree-400.woff2", weight: "400", style: "normal" },
+    { path: "./fonts/bai-jamjuree-500.woff2", weight: "500", style: "normal" },
+    { path: "./fonts/bai-jamjuree-600.woff2", weight: "600", style: "normal" },
+    { path: "./fonts/bai-jamjuree-700.woff2", weight: "700", style: "normal" },
+  ],
 });
 
-const geistMono = Geist_Mono({
-  subsets: ["latin"],
-  variable: "--font-geist-mono",
+const chakraPetch = localFont({
+  variable: "--font-chakrapetch",
   display: "swap",
-  preload: false,
+  src: [{ path: "./fonts/chakra-petch-700.woff2", weight: "700", style: "normal" }],
 });
 
 export const metadata: Metadata = {
@@ -60,7 +66,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#070b18",
+  themeColor: "#F7F7F7",
   colorScheme: "light",
   width: "device-width",
   initialScale: 1,
@@ -75,7 +81,7 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${baiJamjuree.variable} ${chakraPetch.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col font-sans">{children}</body>
     </html>

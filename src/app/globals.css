@@ -1,37 +1,42 @@
 @import "tailwindcss";
 @import "fumadocs-ui/css/neutral.css";
 @import "fumadocs-ui/css/preset.css";
+/* QuillAudits website tokens and qa- component classes (from the
+   quillaudits-website skill). Layered so Tailwind utilities can override them. */
+@import "./qa-tokens.css" layer(components);
 
+/*
+ * App tokens. These names predate the brand system and are used across the
+ * tool's components, so they are kept and mapped onto the QuillAudits palette.
+ */
 :root {
-  --background: #f5f6f8;
-  --foreground: #0a0d14;
-  --surface: #ffffff;
-  --muted: #4d5567;
-  --muted-faint: #6b7385;
-  --rule: #e4e7ec;
-  --rule-strong: #cdd2db;
-  --accent: #103dd3;
-  --accent-hover: #0c2fa8;
-  --accent-soft: #eef2ff;
-  --ink: #070b18;
-  --ink-soft: #111730;
+  --background: #f7f7f7; /* Clean Slate */
+  --foreground: #161616; /* Ledger Black */
+  --surface: #ffffff; /* inputs, popovers, pills on grey cards */
+  --muted: #525252; /* body text */
+  /* The brand's faint grey (#7A7A7A) is under 4.5:1 on the card surface. The
+     tool uses it for labels people must read, so it is one step darker here. */
+  --muted-faint: #6a6a6a;
+  --rule: #dddddd;
+  --rule-strong: #dddddd;
+  --accent: #103dd3; /* Quill Core */
+  --accent-hover: #0d35bb;
+  --accent-soft: #e8e8e8; /* nested panel inside a card */
   --critical: #960028;
-  --critical-soft: #fff1f2;
-  --critical-border: #fecdd3;
-  --high: #d91a1d;
-  --medium: #c2500f;
-  --low: #a16207;
-  --info: #7a00cc;
-  --warning: #b45309;
-  --warning-soft: #fffbeb;
-  --warning-border: #fde68a;
-  --success: #047857;
-  --success-soft: #ecfdf5;
-  --success-border: #a7f3d0;
-  --shadow-card: 0 1px 2px rgba(10, 13, 20, 0.04), 0 1px 1px rgba(10, 13, 20, 0.03);
-  --shadow-pop: 0 12px 32px rgba(10, 13, 20, 0.12), 0 2px 6px rgba(10, 13, 20, 0.06);
-  --radius: 14px;
-  --radius-sm: 10px;
+  --critical-soft: color-mix(in srgb, #960028 8%, white);
+  --critical-border: color-mix(in srgb, #960028 35%, white);
+  --high: #f12326;
+  --medium: #ff7428;
+  --low: #feb848;
+  --info: #9900ff;
+  --warning: #7a5200;
+  --warning-soft: #b57a001a;
+  --warning-border: #b57a00;
+  --success: #2e7d32;
+  --success-soft: #2e7d321a;
+  --success-border: #2e7d32;
+  --shadow-pop: 0 0 4px 0 #00000014;
+  --qa-cta-map: url("/branding/cta-dotted-map.webp");
 }
 
 @theme inline {
@@ -45,8 +50,9 @@
   --color-accent: var(--accent);
   --color-accent-hover: var(--accent-hover);
   --color-accent-soft: var(--accent-soft);
-  --color-ink: var(--ink);
-  --color-ink-soft: var(--ink-soft);
+  --color-sky: #28c6ff;
+  --color-pulse: #9e67ff;
+  --color-card: #f2f2f2;
   --color-critical: var(--critical);
   --color-critical-soft: var(--critical-soft);
   --color-critical-border: var(--critical-border);
@@ -60,8 +66,9 @@
   --color-success: var(--success);
   --color-success-soft: var(--success-soft);
   --color-success-border: var(--success-border);
-  --font-sans: var(--font-geist-sans), system-ui, -apple-system, "Segoe UI", sans-serif;
-  --font-mono: var(--font-geist-mono), ui-monospace, "SFMono-Regular", Consolas, monospace;
+  --font-sans: var(--font-baijamjuree), system-ui, sans-serif;
+  --font-display: var(--font-chakrapetch), system-ui, sans-serif;
+  --font-mono: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
 }
 
 html {
@@ -69,112 +76,60 @@ html {
   scroll-behavior: smooth;
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-sans);
-  min-height: 100vh;
-  text-rendering: optimizeLegibility;
-}
-
-:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 2px;
-}
-
 .eyebrow {
-  font-size: 0.72rem;
-  font-weight: 600;
-  letter-spacing: 0.1em;
+  font: 700 14px/20px var(--font-sans);
   text-transform: uppercase;
   color: var(--accent);
 }
 
-/* ── Dark hero band shared by every tool page ── */
-.hero-ink {
-  position: relative;
-  isolation: isolate;
-  color: #fff;
-  background:
-    radial-gradient(60rem 26rem at 15% -10%, rgba(45, 91, 255, 0.34), transparent 62%),
-    radial-gradient(40rem 22rem at 92% 0%, rgba(20, 184, 166, 0.16), transparent 60%),
-    var(--ink);
-}
-.hero-ink::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  pointer-events: none;
-  background-image:
-    linear-gradient(rgba(255, 255, 255, 0.045) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.045) 1px, transparent 1px);
-  background-size: 56px 56px;
-  mask-image: linear-gradient(to bottom, black, transparent 85%);
-  -webkit-mask-image: linear-gradient(to bottom, black, transparent 85%);
-}
-.hero-ink .eyebrow {
-  color: #9db4ff;
-}
-.hero-accent {
-  background: linear-gradient(90deg, #8fa9ff, #5eead4);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-}
-
-/* ── Surfaces. Class names are legacy ("glass"); the look is now flat. ── */
+/*
+ * Surfaces. Class names are legacy ("glass"); they now carry the brand's flat
+ * card system: grey card, 1px line, 24px radius, no shadow.
+ */
 .glass-panel {
-  background: var(--surface);
+  background: #f2f2f2;
   border-color: var(--rule);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow-card);
+  border-radius: 24px;
+}
+/* Popovers sit above cards, so they are white with the one soft shadow the site uses. */
+[role="listbox"].glass-panel {
+  background: var(--surface);
+  border-radius: 16px;
 }
 
 .glass-chip {
-  background: #f8f9fb;
+  background: #e8e8e8;
   border-color: var(--rule);
-  border-radius: var(--radius-sm);
+  border-radius: 16px;
 }
 
 .glass-btn-secondary {
-  background: var(--surface);
-  border-color: var(--rule-strong);
-  transition: background 0.15s ease, border-color 0.15s ease;
+  background: #7c7c7c0f;
+  border-color: transparent;
 }
 .glass-btn-secondary:hover {
-  background: #f8f9fb;
-  border-color: #b4bbc8;
+  background: #7c7c7c1d;
 }
 
 .glass-input {
   background: var(--surface);
-  border-color: var(--rule-strong);
-  border-radius: var(--radius-sm);
+  border-color: var(--rule);
+  border-radius: 12px;
+  color: var(--foreground);
+  font-weight: 500;
 }
 .glass-input::placeholder {
-  color: var(--muted-faint);
+  color: var(--muted);
+  opacity: 0.8;
 }
 .glass-input:hover {
-  border-color: #b4bbc8;
+  border-color: #bdbdbd;
 }
 .glass-input:focus,
 .glass-input:focus-visible {
-  outline: none;
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
   border-color: var(--accent);
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 18%, transparent);
-}
-
-/* FAQ disclosure */
-.faq-item summary {
-  list-style: none;
-  cursor: pointer;
-}
-.faq-item summary::-webkit-details-marker {
-  display: none;
-}
-.faq-item[open] .faq-chevron {
-  transform: rotate(45deg);
 }
 
 button,
@@ -236,4 +191,19 @@ select {
   .scan-orb::after {
     animation: none !important;
   }
+}
+
+/* On a phone the trust line wraps, so the dividers between facts are dropped. */
+@media (max-width: 639px) {
+  .qa-trust > * + * {
+    padding-left: 0;
+    border-left: 0;
+  }
+}
+
+/* Long addresses and JSON evidence must not widen the report past the screen:
+   grid and flex children default to min-width:auto, which lets them. */
+#report,
+#report * {
+  min-width: 0;
 }

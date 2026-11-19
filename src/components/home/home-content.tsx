@@ -1,16 +1,5 @@
 import Link from "next/link";
-import {
-  ArrowRight,
-  FileSearch,
-  Fingerprint,
-  GitCompareArrows,
-  KeyRound,
-  Layers,
-  Plus,
-  Puzzle,
-  ShieldCheck,
-  Users,
-} from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import { HACKS, formatUsdCompact, totalLossUsd, verdictCounts } from "@/components/hacks/hacks-data";
 import { HOME_FAQ } from "@/lib/seo/faq";
 import { MAINNET_NAMES, TESTNET_NAMES } from "@/lib/seo/networks";
@@ -18,32 +7,26 @@ import { PUBLISHER_URL } from "@/lib/seo/site";
 
 const checks = [
   {
-    icon: Users,
     title: "Owners and threshold",
     body: "Flags a threshold of 1, a small minority that can approve alone, very small owner sets and thresholds that exceed the owner count.",
   },
   {
-    icon: Puzzle,
     title: "Modules",
     body: "Lists every enabled module and marks the ones it does not recognize. A module can move funds without owner signatures.",
   },
   {
-    icon: ShieldCheck,
     title: "Transaction guard",
     body: "Reads the guard storage slot and reports whether a guard is set, and whether it is a known contract.",
   },
   {
-    icon: Layers,
     title: "Singleton and version",
     body: "Checks the implementation the proxy points at against known Safe deployments, so a swapped mastercopy stands out.",
   },
   {
-    icon: KeyRound,
     title: "Fallback handler",
     body: "Identifies the fallback handler and warns when it is unknown or has no contract code behind it.",
   },
   {
-    icon: GitCompareArrows,
     title: "Configuration drift",
     body: "Compares each scan with your last local snapshot and highlights added owners, lowered thresholds, new modules and changed implementations.",
   },
@@ -51,15 +34,15 @@ const checks = [
 
 const steps = [
   {
-    title: "Paste a Safe address or URL",
+    title: "Paste a Safe address or URL.",
     body: "A raw 0x address, an eth:0x… prefixed address, or a link from the Safe app or a block explorer. The network is detected for you on mainnets.",
   },
   {
-    title: "Confirm the owners",
+    title: "Confirm the owners.",
     body: "The scan reads the Safe over direct RPC and lists every signer. You confirm whether each address is one you expect.",
   },
   {
-    title: "Read and export the report",
+    title: "Read and export the report.",
     body: "You get a security score, prioritized findings with recommendations, and a Markdown or JSON export to keep as audit evidence.",
   },
 ] as const;
@@ -69,191 +52,167 @@ export function HomeContent() {
   const helped = counts.yes + counts.partially;
 
   return (
-    <div className="bg-background">
-      <section aria-labelledby="checks-heading" className="mx-auto max-w-[1200px] px-5 py-16 sm:py-20 lg:px-6">
-        <SectionIntro
-          id="checks-heading"
-          eyebrow="Safe Inspector"
-          title="What the Safe multisig scan checks"
-          lead="Every value is read from the Safe contract on the selected network, not from an indexer or a hosted backend."
-        />
-        <ul className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {checks.map(({ icon: Icon, title, body }) => (
-            <li key={title} className="rounded-[14px] border border-rule bg-surface p-6 shadow-[var(--shadow-card)]">
-              <span className="grid h-10 w-10 place-items-center rounded-[10px] bg-accent-soft text-accent">
-                <Icon className="h-5 w-5" aria-hidden="true" />
-              </span>
-              <h3 className="mt-4 text-[1.02rem] font-semibold tracking-tight">{title}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-muted">{body}</p>
+    <>
+      <section aria-labelledby="checks-heading" className="qa-container qa-section">
+        <p className="qa-eyebrow qa-center-mobile">Safe Inspector</p>
+        <h2 id="checks-heading" className="qa-h2 qa-center-mobile mt-4 max-w-[22ch] max-lg:mx-auto">
+          What the Safe multisig scan checks.
+        </h2>
+        <p className="qa-body-lg qa-center-mobile mt-6 max-w-[62ch] max-lg:mx-auto">
+          Multisig Inspector reads every value from the Safe contract on the
+          selected network, not from an indexer or a hosted backend.
+        </p>
+        <ul className="qa-grid qa-grid--3 mt-12 list-none p-0">
+          {checks.map(({ title, body }) => (
+            <li key={title} className="qa-card">
+              <h3 className="qa-h3">{title}</h3>
+              <p className="mt-3">{body}</p>
             </li>
           ))}
         </ul>
-        <p className="mt-6 text-sm text-muted">
+        <p className="qa-small mt-6 qa-center-mobile">
           Supported networks: {MAINNET_NAMES.join(", ")}, plus {TESTNET_NAMES.join(" and ")} testnets.
         </p>
       </section>
 
-      <section aria-labelledby="how-heading" className="border-y border-rule bg-surface">
-        <div className="mx-auto max-w-[1200px] px-5 py-16 sm:py-20 lg:px-6">
-          <SectionIntro
-            id="how-heading"
-            eyebrow="How it works"
-            title="How to check a Safe multisig in three steps"
-          />
-          <ol className="mt-10 grid gap-8 md:grid-cols-3">
-            {steps.map((step, index) => (
-              <li key={step.title} className="relative border-t-2 border-foreground pt-5">
-                <span className="font-mono text-xs font-medium text-muted-faint">
-                  {String(index + 1).padStart(2, "0")}
-                </span>
-                <h3 className="mt-2 text-[1.08rem] font-semibold tracking-tight">{step.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-muted">{step.body}</p>
-              </li>
-            ))}
-          </ol>
+      <section aria-labelledby="how-heading" className="qa-container qa-section pt-0!">
+        <h2 id="how-heading" className="qa-h2 text-center">
+          How to check a Safe multisig in three steps.
+        </h2>
+        <ol className="qa-grid qa-grid--3 mt-12 list-none p-0">
+          {steps.map((step, index) => (
+            <li key={step.title} className="qa-card">
+              <p className="qa-step-label">Step {String(index + 1).padStart(2, "0")}</p>
+              <h3 className="mt-3 text-lg leading-7 font-semibold text-foreground">{step.title}</h3>
+              <p className="mt-3">{step.body}</p>
+            </li>
+          ))}
+        </ol>
+      </section>
+
+      <section aria-labelledby="hacks-heading" className="qa-section qa-section--dark">
+        <div className="qa-container">
+          <p className="qa-eyebrow qa-center-mobile">Why it matters</p>
+          <h2 id="hacks-heading" className="qa-h2 qa-center-mobile mt-4 max-w-[24ch] max-lg:mx-auto">
+            {formatUsdCompact(totalLossUsd())} lost across {HACKS.length} multisig incidents. The contracts held.
+          </h2>
+          <p className="qa-body-lg qa-center-mobile mt-6 max-w-[62ch] max-lg:mx-auto">
+            Most multisig losses happen after the audit, in the gap between a
+            transaction being created and a signer approving it. In {helped} of
+            the {HACKS.length} incidents we tracked, an independent
+            configuration scan or transaction review could have helped fully or
+            partially.
+          </p>
+          <dl className="qa-grid qa-grid--3 mt-12">
+            <VerdictStat value={counts.yes} label="Could have helped" />
+            <VerdictStat value={counts.partially} label="Could have helped partially" />
+            <VerdictStat value={counts.no} label="Out of scope for this tool" />
+          </dl>
+          <div className="mt-10 flex max-lg:justify-center">
+            <Link href="/hacks" className="qa-pill">
+              <span className="qa-pill__icon bg-white! text-foreground!">
+                <ArrowUpRight aria-hidden="true" />
+              </span>
+              See the multisig hack timeline
+            </Link>
+          </div>
         </div>
       </section>
 
-      <section aria-labelledby="tools-heading" className="mx-auto max-w-[1200px] px-5 py-16 sm:py-20 lg:px-6">
-        <SectionIntro
-          id="tools-heading"
-          eyebrow="Two tools, two human checks"
-          title="Review the Safe, then review the transaction"
-          lead="Contract audits cover the code. Most multisig losses happen later, in the gap between a transaction being created and a signer approving it."
-        />
-        <div className="mt-10 grid gap-4 lg:grid-cols-2">
+      <section aria-labelledby="tools-heading" className="qa-container qa-section">
+        <h2 id="tools-heading" className="qa-h2 qa-h2--lg mx-auto max-w-[20ch] text-center">
+          Two tools. Two human checks.
+        </h2>
+        <p className="qa-body-lg mx-auto mt-6 max-w-[58ch] text-center">
+          Review the Safe, then review the transaction. Each tool gives you an
+          independent reading. The final comparison is always yours.
+        </p>
+        <div className="qa-grid qa-grid--2 mt-12">
           <ToolCard
-            icon={<FileSearch className="h-5 w-5" aria-hidden="true" />}
+            label="Configuration"
             title="Safe Inspector"
-            body="Answers one question: is this Safe configured as intended, and has anything changed since the last time you looked?"
-            points={["Owners, threshold, modules, guard, singleton", "Severity ranked findings with fixes", "Local snapshots for drift detection"]}
+            body="Is this Safe configured as intended, and has anything changed since the last time you looked?"
+            points={[
+              "Owners, threshold, modules, guard and singleton",
+              "Severity ranked findings with fixes",
+              "Local snapshots for drift detection",
+            ]}
             href="/docs/safe-inspector"
             cta="How Safe Inspector works"
           />
           <ToolCard
-            icon={<Fingerprint className="h-5 w-5" aria-hidden="true" />}
+            label="Before signing"
+            highlight
             title="Transaction Inspector"
-            body="Answers the other one: what will this transaction do, and is the hash on your signing device the one you reviewed?"
-            points={["Decodes calldata and MultiSend batches", "Recomputes the Safe transaction hash locally", "Optional current-state simulation"]}
+            body="What will this transaction do, and is the hash on your signing device the one you reviewed?"
+            points={[
+              "Decodes calldata and MultiSend batches",
+              "Recomputes the Safe transaction hash locally",
+              "Optional current-state simulation",
+            ]}
             href="/transaction-xray"
             cta="Inspect a transaction"
           />
         </div>
       </section>
 
-      <section aria-labelledby="hacks-heading" className="hero-ink">
-        <div className="mx-auto grid max-w-[1200px] items-center gap-10 px-5 py-16 sm:py-20 lg:grid-cols-[1.1fr_1fr] lg:px-6">
-          <div>
-            <p className="eyebrow">Why it matters</p>
-            <h2 id="hacks-heading" className="mt-3 text-[clamp(1.6rem,3.2vw,2.3rem)] leading-[1.1] font-semibold tracking-[-0.025em] text-balance">
-              {formatUsdCompact(totalLossUsd())} lost across {HACKS.length} multisig incidents we tracked
-            </h2>
-            <p className="mt-4 max-w-[52ch] text-base leading-relaxed text-white/70">
-              In {helped} of those {HACKS.length} incidents, an independent
-              configuration scan or transaction review could have helped fully
-              or partially. The timeline explains each one, including the cases
-              where this tool would not have made a difference.
-            </p>
-            <Link
-              href="/hacks"
-              className="mt-7 inline-flex h-11 items-center gap-2 rounded-[10px] bg-white px-5 text-sm font-semibold text-ink transition-colors hover:bg-white/90"
-            >
-              See the multisig hack timeline
-              <ArrowRight className="h-4 w-4" aria-hidden="true" />
-            </Link>
-          </div>
-          <dl className="grid grid-cols-3 divide-x divide-white/10 rounded-2xl border border-white/10 bg-white/[0.04]">
-            <Stat value={String(counts.yes)} label="Could have helped" />
-            <Stat value={String(counts.partially)} label="Partially" />
-            <Stat value={String(counts.no)} label="Out of scope" />
-          </dl>
-        </div>
-      </section>
-
-      <section aria-labelledby="faq-heading" className="mx-auto max-w-[860px] px-5 py-16 sm:py-20 lg:px-6">
-        <SectionIntro id="faq-heading" eyebrow="FAQ" title="Safe multisig security questions, answered" />
-        <div className="mt-8 divide-y divide-rule rounded-[14px] border border-rule bg-surface shadow-[var(--shadow-card)]">
-          {HOME_FAQ.map((entry, index) => (
-            <details key={entry.question} className="faq-item group px-5 sm:px-6" open={index === 0}>
-              <summary className="flex items-center justify-between gap-4 py-5">
-                <h3 className="text-[1rem] font-semibold tracking-tight">{entry.question}</h3>
-                <Plus className="faq-chevron h-4 w-4 shrink-0 text-muted-faint transition-transform" aria-hidden="true" />
+      <section aria-labelledby="faq-heading" className="qa-container qa-section pt-0!">
+        <h2 id="faq-heading" className="qa-h2 text-center">
+          Frequently asked questions
+        </h2>
+        <div className="qa-narrow mt-12">
+          {HOME_FAQ.map((entry) => (
+            <details key={entry.question} className="qa-faq__item">
+              <summary>
+                <h3 className="m-0 text-lg leading-7 font-semibold">{entry.question}</h3>
               </summary>
-              <p className="pb-5 text-[0.95rem] leading-relaxed text-muted">{entry.answer}</p>
+              <p>{entry.answer}</p>
             </details>
           ))}
+          <p className="qa-prose mt-8 text-center">
+            More detail in the <Link href="/docs">documentation</Link> and the{" "}
+            <Link href="/docs/security-model">security and trust model</Link>.
+          </p>
         </div>
-        <p className="mt-5 text-sm text-muted">
-          More detail in the{" "}
-          <Link href="/docs" className="font-semibold text-accent hover:underline">
-            documentation
-          </Link>{" "}
-          and the{" "}
-          <Link href="/docs/security-model" className="font-semibold text-accent hover:underline">
-            security and trust model
-          </Link>
-          .
-        </p>
       </section>
 
-      <section aria-labelledby="audit-heading" className="mx-auto max-w-[1200px] px-5 pb-20 lg:px-6">
-        <div className="flex flex-col items-start justify-between gap-6 rounded-2xl border border-[#d9e1ff] bg-accent-soft p-8 md:flex-row md:items-center sm:p-10">
-          <div>
-            <h2 id="audit-heading" className="text-[1.4rem] font-semibold tracking-tight">
-              Need more than a configuration scan?
-            </h2>
-            <p className="mt-2 max-w-[60ch] text-[0.95rem] leading-relaxed text-muted">
-              This tool reviews Safe configuration and individual transactions.
-              It does not replace a full audit of your contracts, signer
-              operations or key management. QuillAudits does that work.
-            </p>
-          </div>
-          <a
-            href={PUBLISHER_URL}
-            target="_blank"
-            rel="noopener"
-            className="inline-flex h-11 shrink-0 items-center gap-2 rounded-[10px] bg-accent px-5 text-sm font-semibold text-white transition-colors hover:bg-accent-hover"
-          >
-            Talk to QuillAudits
-            <ArrowRight className="h-4 w-4" aria-hidden="true" />
-          </a>
-        </div>
+      <section aria-labelledby="audit-heading" className="qa-panel qa-cta-panel qa-cta-panel--map">
+        <h2 id="audit-heading" className="qa-statement mx-auto max-w-[760px] uppercase">
+          The scanner shows the state. The audit tests the system.
+        </h2>
+        <p className="qa-lead mx-auto mt-6 mb-12 max-w-[900px]">
+          Multisig Inspector reviews Safe configuration and individual
+          transactions. It does not replace an audit of your signers, keys and
+          signing process. QuillAudits does that work.
+        </p>
+        <a href={`${PUBLISHER_URL}/opsec-and-multisig-audit`} className="qa-btn qa-btn--white">
+          See the OPSEC and Multisig Audit
+        </a>
       </section>
-    </div>
+    </>
   );
 }
 
-function SectionIntro({
-  id,
-  eyebrow,
-  title,
-  lead,
-}: {
-  id: string;
-  eyebrow: string;
-  title: string;
-  lead?: string;
-}) {
+function VerdictStat({ value, label }: { value: number; label: string }) {
   return (
-    <div className="max-w-[720px]">
-      <p className="eyebrow">{eyebrow}</p>
-      <h2 id={id} className="mt-3 text-[clamp(1.6rem,3.2vw,2.3rem)] leading-[1.1] font-semibold tracking-[-0.025em] text-balance">
-        {title}
-      </h2>
-      {lead ? <p className="mt-4 text-base leading-relaxed text-muted text-pretty">{lead}</p> : null}
+    <div className="qa-card qa-card--dark qa-card--stat flex flex-col-reverse text-center">
+      <dt className="mt-2">{label}</dt>
+      <dd className="qa-stat m-0 text-[#EEEEEE]">{value} of {HACKS.length}</dd>
     </div>
   );
 }
 
 function ToolCard({
-  icon,
+  label,
+  highlight = false,
   title,
   body,
   points,
   href,
   cta,
 }: {
-  icon: React.ReactNode;
+  label: string;
+  highlight?: boolean;
   title: string;
   body: string;
   points: string[];
@@ -261,31 +220,22 @@ function ToolCard({
   cta: string;
 }) {
   return (
-    <article className="flex flex-col rounded-[14px] border border-rule bg-surface p-7 shadow-[var(--shadow-card)]">
-      <span className="grid h-10 w-10 place-items-center rounded-[10px] bg-foreground text-white">{icon}</span>
-      <h3 className="mt-4 text-[1.2rem] font-semibold tracking-tight">{title}</h3>
-      <p className="mt-2 text-[0.95rem] leading-relaxed text-muted">{body}</p>
-      <ul className="mt-4 space-y-2 text-sm text-foreground">
+    <article className="qa-card qa-card--feature">
+      <span className={highlight ? "qa-card__label qa-card__label--highlight" : "qa-card__label"}>
+        {label}
+      </span>
+      <h3 className="qa-h3 qa-h3--lg">{title}</h3>
+      <p>{body}</p>
+      <ul className="mb-4 grid list-none gap-4 p-0">
         {points.map((point) => (
-          <li key={point} className="flex gap-2.5">
-            <span className="mt-[0.55em] h-1.5 w-1.5 shrink-0 rounded-full bg-accent" aria-hidden="true" />
+          <li key={point} className="qa-check">
             {point}
           </li>
         ))}
       </ul>
-      <Link href={href} className="mt-6 inline-flex items-center gap-1.5 text-sm font-semibold text-accent hover:underline">
+      <Link href={href} className="qa-btn qa-btn--block">
         {cta}
-        <ArrowRight className="h-4 w-4" aria-hidden="true" />
       </Link>
     </article>
-  );
-}
-
-function Stat({ value, label }: { value: string; label: string }) {
-  return (
-    <div className="flex flex-col-reverse px-4 py-7 text-center">
-      <dt className="mt-2 text-xs leading-snug text-white/60">{label}</dt>
-      <dd className="text-[2.2rem] leading-none font-semibold tracking-tight">{value}</dd>
-    </div>
   );
 }

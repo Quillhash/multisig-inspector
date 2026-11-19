@@ -77,7 +77,7 @@ export function NetworkSelect({ value, onChange, className, allowedChainIds, ari
         aria-controls={listboxId}
         className={cn(
           inputClassName,
-          "mt-1.5 flex w-full items-center justify-between gap-2 text-left font-normal",
+          "mt-2 flex w-full items-center justify-between gap-2 text-left",
           !selectedChain && "text-muted",
         )}
         onClick={() => setOpen((current) => !current)}
@@ -105,7 +105,7 @@ export function NetworkSelect({ value, onChange, className, allowedChainIds, ari
           id={listboxId}
           role="listbox"
           aria-label="Networks"
-          className="glass-panel absolute top-[calc(100%+6px)] z-50 max-h-80 w-full overflow-hidden rounded-md border text-left shadow-[var(--shadow-pop)]"
+          className="glass-panel absolute top-[calc(100%+6px)] z-50 max-h-80 w-full overflow-hidden rounded-2xl border text-left shadow-[var(--shadow-pop)]"
         >
           <div className="flex items-center justify-between gap-3 border-b border-rule bg-accent-soft px-3 py-2.5">
             <label
@@ -188,7 +188,7 @@ function ChainGroup({
           aria-label={chain.name}
           aria-selected={selectedChainId === chain.id}
           className={cn(
-            "flex w-full items-center gap-2.5 rounded-md px-2 py-2 text-left text-[0.867rem] transition",
+            "flex w-full items-center gap-2.5 rounded-2xl px-2 py-2 text-left text-[0.867rem] transition",
             selectedChainId === chain.id
               ? "bg-accent-soft text-accent"
               : "hover:bg-accent-soft",
@@ -228,4 +228,4 @@ function ChainIcon({ chain }: { chain: SupportedChain }) {
 }
 
 const inputClassName =
-  "glass-input h-11 rounded-md border px-3 text-sm outline-none transition-colors";
+  "glass-input h-14 border px-5 text-base outline-none transition-colors";
