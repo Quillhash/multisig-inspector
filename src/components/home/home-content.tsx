@@ -12,8 +12,8 @@ import {
   Users,
 } from "lucide-react";
 import { HACKS, formatUsdCompact, totalLossUsd, verdictCounts } from "@/components/hacks/hacks-data";
-import { getMainnetChains } from "@/lib/chains/chains";
 import { HOME_FAQ } from "@/lib/seo/faq";
+import { MAINNET_NAMES, TESTNET_NAMES } from "@/lib/seo/networks";
 import { PUBLISHER_URL } from "@/lib/seo/site";
 
 const checks = [
@@ -65,7 +65,6 @@ const steps = [
 ] as const;
 
 export function HomeContent() {
-  const mainnets = getMainnetChains();
   const counts = verdictCounts();
   const helped = counts.yes + counts.partially;
 
@@ -90,7 +89,7 @@ export function HomeContent() {
           ))}
         </ul>
         <p className="mt-6 text-sm text-muted">
-          Supported networks: {mainnets.map((chain) => chain.name).join(", ")}, plus Sepolia and Base Sepolia testnets.
+          Supported networks: {MAINNET_NAMES.join(", ")}, plus {TESTNET_NAMES.join(" and ")} testnets.
         </p>
       </section>
 

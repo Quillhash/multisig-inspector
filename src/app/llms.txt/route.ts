@@ -1,7 +1,7 @@
 import { HACKS } from "@/components/hacks/hacks-data";
 import { docsSource } from "@/lib/docs/source";
-import { getMainnetChains } from "@/lib/chains/chains";
 import { HOME_FAQ } from "@/lib/seo/faq";
+import { MAINNET_NAMES, TESTNET_NAMES } from "@/lib/seo/networks";
 import { PUBLISHER_NAME, PUBLISHER_URL, SITE_NAME, absoluteUrl } from "@/lib/seo/site";
 
 export const dynamic = "force-static";
@@ -26,8 +26,8 @@ export function GET() {
 Publisher: ${PUBLISHER_NAME} (${PUBLISHER_URL})
 License: MIT
 Price: free, no account
-Supported mainnets: ${getMainnetChains().map((chain) => chain.name).join(", ")}
-Supported testnets: Sepolia, Base Sepolia
+Supported mainnets: ${MAINNET_NAMES.join(", ")}
+Supported testnets: ${TESTNET_NAMES.join(", ")}
 
 ## Tools
 
