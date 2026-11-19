@@ -158,7 +158,7 @@ export function TransactionQueue({
         <QueueColumn
           heading="Local drafts"
           count={0}
-          chipClass="border-rule bg-white/60 text-muted"
+          chipClass="border-rule bg-surface text-muted"
         >
           <QueueEmpty>
             Unsigned Transaction Builder drafts stay in the creator&apos;s Safe
@@ -225,7 +225,7 @@ function QueueColumn({
 }) {
   return (
     <section className="glass-chip flex min-h-[12rem] flex-col rounded-[12px] border">
-      <div className="flex items-center justify-between gap-2 border-b border-white/70 px-3 py-2.5">
+      <div className="flex items-center justify-between gap-2 border-b border-rule px-3 py-2.5">
         <h2 className="text-[0.75rem] font-semibold tracking-[0.04em] text-muted uppercase">
           {heading}
         </h2>
@@ -271,8 +271,8 @@ function TransactionRow({
       className={cn(
         "flex w-full items-center gap-2.5 rounded-md border p-2.5 text-left transition focus-visible:border-accent focus-visible:ring-[3px] focus-visible:ring-accent/15 focus-visible:outline-none",
         selected
-          ? "border-accent bg-white/90 ring-2 ring-accent/15"
-          : "border-white/80 bg-white/70 hover:border-[color-mix(in_srgb,var(--accent)_35%,white)] hover:bg-white/90",
+          ? "border-accent bg-surface ring-2 ring-accent/15"
+          : "border-rule bg-surface hover:border-[color-mix(in_srgb,var(--accent)_45%,white)]",
       )}
       disabled={loading}
       onClick={() => onSelect(transaction)}

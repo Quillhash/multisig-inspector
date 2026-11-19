@@ -1,16 +1,15 @@
 "use client";
 
-import { Download, FileJson, Loader2, Search } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
+import { Check, Download, FileJson, Loader2, Search } from "lucide-react";
+import { useEffect, useMemo, useState, type ReactNode } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
-import { Card, CardHead } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import { inputClassName } from "@/components/ui/input";
 import { EmptyReportPanel } from "@/components/safe-inspector/empty-report-panel";
 import { NetworkSelect } from "@/components/safe-inspector/network-select";
 import { SiteHeader } from "@/components/safe-inspector/site-header";
 import { getSupportedChain } from "@/lib/chains/chains";
-import { createRpcClient } from "@/lib/chains/rpc";
 import { createJsonReport } from "@/lib/reports/json";
 import { createMarkdownReport } from "@/lib/reports/markdown";
 import {
@@ -26,18 +25,13 @@ import {
   evaluateSafeRisk,
   selectPrimaryFindings,
 } from "@/lib/risk/engine";
-import { parseSafeAddressInput } from "@/lib/safe/address";
-import { detectSafeChainsForAddress } from "@/lib/safe/detectChain";
 import { formatScanError } from "@/lib/safe/errors";
-import { scanSafe } from "@/lib/safe/scanner";
 import type {
   ClassifiedAddress,
   RiskFinding,
   SafeSnapshot,
   SnapshotChange,
 } from "@/lib/safe/types";
-import { compareSnapshots } from "@/lib/snapshots/compare";
-import { getLatestSnapshot, saveSnapshot } from "@/lib/snapshots/db";
 import { cn } from "@/lib/utils/cn";
 
 type ScanResult = {
@@ -54,7 +48,7 @@ type FinalReport = ScanResult & {
 const SCORE_RING_RADIUS = 44;
 const SCORE_RING_CIRCUMFERENCE = 2 * Math.PI * SCORE_RING_RADIUS;
 
-export function SafeInspectorApp() {
+export function SafeInspectorApp({ children }: { children?: ReactNode }) {
   const [safeAddress, setSafeAddress] = useState("");
   const [chainId, setChainId] = useState<number | null>(null);
   const [showAllFindings, setShowAllFindings] = useState(false);
@@ -64,6 +58,24 @@ export function SafeInspectorApp() {
 
   const scanMutation = useMutation({
     mutationFn: async (): Promise<ScanResult> => {
+      // The scan stack (viem client, Safe deployment registry, Dexie) is loaded
+      // on first scan so it stays out of the initial page bundle.
+      const [
+        { parseSafeAddressInput },
+        { detectSafeChainsForAddress },
+        { createRpcClient },
+        { scanSafe },
+        { compareSnapshots },
+        { getLatestSnapshot, saveSnapshot },
+      ] = await Promise.all([
+        import("@/lib/safe/address"),
+        import("@/lib/safe/detectChain"),
+        import("@/lib/chains/rpc"),
+        import("@/lib/safe/scanner"),
+        import("@/lib/snapshots/compare"),
+        import("@/lib/snapshots/db"),
+      ]);
+
       // Accepts a raw 0x address, an eth:0x… prefixed address, or a Safe/explorer URL.
       const parsed = parseSafeAddressInput(safeAddress);
       let resolvedChainId = parsed.chainId ?? chainId ?? undefined;
@@ -99,6 +111,10 @@ export function SafeInspectorApp() {
       setActiveSection("findings");
     },
     onSuccess: (data) => {
+      // Bring the result into view. Errors stay next to the form, so no scroll there.
+      requestAnimationFrame(() =>
+        document.getElementById("report")?.scrollIntoView({ block: "start" }),
+      );
       // Reflect the resolved network in the selector after auto-detection.
       setChainId(data.snapshot.chainId);
     },
@@ -190,122 +206,112 @@ export function SafeInspectorApp() {
       : "-";
   const heroFindings = finalReport ? String(finalReport.findings.length) : "-";
 
+  const hasOutput = scanMutation.isPending || Boolean(result);
+
   return (
-    <div className="min-h-screen text-foreground">
+    <>
       <SiteHeader />
 
-      <section className="page-enter border-b border-white/60">
-        <div className="mx-auto grid max-w-[1320px] items-end gap-8 px-5 py-8 lg:grid-cols-[1fr_auto] lg:px-6">
-          <div>
-            <p className="text-[0.7rem] font-semibold tracking-[0.12em] text-accent uppercase">
-              QuillAudits · Multisig inspector
+      <section className="hero-ink">
+        <div className="mx-auto max-w-[1200px] px-5 pt-14 pb-12 sm:pt-20 sm:pb-16 lg:px-6">
+          <div className="page-enter mx-auto max-w-[820px] text-center">
+            <p className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.06] px-3.5 py-1.5 text-xs font-medium text-white/80">
+              <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" aria-hidden="true" />
+              Free and read-only. No wallet connection.
             </p>
-            <h1 className="mt-3 max-w-[20ch] text-[clamp(1.75rem,3.2vw,2.35rem)] leading-[1.08] font-bold tracking-tight text-pretty">
-              Read-only{" "}
-              <span className="text-accent">security report</span>
+            <h1 className="mt-6 text-[clamp(2.1rem,5.4vw,3.75rem)] leading-[1.04] font-semibold tracking-[-0.035em] text-balance">
+              Check any Safe multisig{" "}
+              <span className="hero-accent">before you sign</span>
             </h1>
-            <p className="mt-3 max-w-[48ch] text-[0.92rem] leading-relaxed text-muted text-pretty">
-              Inspect Gnosis Safe configuration on-chain. Surface ownership risk,
-              module exposure, and configuration drift. Export the report as
-              audit evidence without a backend.
+            <p className="mx-auto mt-5 max-w-[60ch] text-[1.02rem] leading-relaxed text-white/70 text-pretty">
+              Multisig Inspector reads a Safe (Gnosis Safe) straight from the
+              chain and flags risky owners, thresholds, modules and guards. It
+              tracks configuration drift between scans and exports the report
+              as audit evidence.
             </p>
           </div>
-          {(finalReport || result) && (
-            <div className="page-enter-delay-1 grid min-w-[280px] grid-cols-3 border border-rule">
-              <HeroStat label="Owners" value={heroOwners} />
-              <HeroStat label="Threshold" value={heroThreshold} />
-              <HeroStat label="Findings" value={heroFindings} />
+
+          <form
+            className="page-enter page-enter-delay-1 mx-auto mt-9 max-w-[920px] rounded-2xl bg-surface p-3 text-foreground shadow-[0_24px_60px_rgba(0,0,0,0.35)] sm:p-4"
+            onSubmit={(event) => {
+              event.preventDefault();
+              scanMutation.mutate();
+            }}
+          >
+            <div className="grid items-end gap-3 md:grid-cols-[230px_1fr_auto]">
+              <div>
+                <span className="text-xs font-semibold text-muted">
+                  Network <span className="font-normal text-muted-faint">(auto-detected)</span>
+                </span>
+                <NetworkSelect value={chainId} onChange={setChainId} ariaLabel="Network" />
+              </div>
+
+              <label className="block min-w-0">
+                <span className="text-xs font-semibold text-muted">Safe address or URL</span>
+                <input
+                  className={cn(inputClassName, "h-11 font-mono text-[0.82rem]")}
+                  placeholder="0x…  ·  eth:0x…  ·  Safe or explorer URL"
+                  value={safeAddress}
+                  onChange={(event) => setSafeAddress(event.target.value)}
+                  autoComplete="off"
+                  autoCapitalize="off"
+                  spellCheck={false}
+                  inputMode="url"
+                />
+              </label>
+
+              <Button
+                className="h-11 w-full rounded-[10px] px-6 disabled:opacity-60 md:w-auto"
+                disabled={scanMutation.isPending || !safeAddress.trim()}
+                type="submit"
+              >
+                {scanMutation.isPending ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : (
+                  <Search className="h-4 w-4" />
+                )}
+                {scanMutation.isPending ? "Scanning" : "Scan Safe"}
+              </Button>
             </div>
-          )}
+
+            {scanError ? (
+              <div
+                role="alert"
+                className="mt-3 rounded-[10px] border border-critical-border bg-critical-soft p-3 text-sm text-critical"
+              >
+                <div className="font-semibold">{scanError.title}</div>
+                <p className="mt-1 leading-relaxed">{scanError.message}</p>
+                {scanError.help ? (
+                  <p className="mt-2 text-[0.8rem] leading-relaxed text-critical/80">
+                    {scanError.help}
+                  </p>
+                ) : null}
+              </div>
+            ) : null}
+          </form>
+
+          <ul className="page-enter page-enter-delay-2 mx-auto mt-6 flex max-w-[920px] flex-wrap items-center justify-center gap-x-6 gap-y-2 text-[0.8rem] text-white/60">
+            {[
+              "Direct RPC reads",
+              "Never signs or submits",
+              "No backend database",
+              "Snapshots stay in your browser",
+            ].map((item) => (
+              <li key={item} className="inline-flex items-center gap-1.5">
+                <Check className="h-3.5 w-3.5 text-emerald-400" aria-hidden="true" />
+                {item}
+              </li>
+            ))}
+          </ul>
         </div>
       </section>
 
-      <div className="page-enter-delay-2 mx-auto grid max-w-[1320px] gap-5 px-5 py-5 pb-10 lg:grid-cols-[360px_1fr] lg:px-6">
-        <aside className="space-y-3 lg:sticky lg:top-[4.25rem] lg:self-start">
-          <Card>
-            <CardHead>Scan Safe</CardHead>
-            <div className="p-4 pt-0">
-              <form
-                className="space-y-3.5"
-                onSubmit={(event) => {
-                  event.preventDefault();
-                  scanMutation.mutate();
-                }}
-              >
-                <label className="block">
-                  <span className="text-[0.8rem] font-semibold text-muted">
-                    Network{" "}
-                    <span className="font-normal text-muted-faint">
-                      (optional — auto-detected)
-                    </span>
-                  </span>
-                  <NetworkSelect value={chainId} onChange={setChainId} />
-                </label>
-
-                <label className="block">
-                  <span className="text-[0.8rem] font-semibold text-muted">
-                    Safe address or URL
-                  </span>
-                  <input
-                    className={cn(inputClassName, "font-mono text-[0.8rem]")}
-                    placeholder="0x… · eth:0x… · Safe / explorer URL"
-                    value={safeAddress}
-                    onChange={(event) => setSafeAddress(event.target.value)}
-                  />
-                </label>
-
-                <Button
-                  className="mt-1 w-full disabled:opacity-100"
-                  disabled={scanMutation.isPending || !safeAddress.trim()}
-                  type="submit"
-                >
-                  {scanMutation.isPending ? (
-                    <Loader2 className="h-4 w-4 animate-spin" />
-                  ) : (
-                    <Search className="h-4 w-4" />
-                  )}
-                  {scanMutation.isPending ? "Scanning" : "Scan"}
-                </Button>
-              </form>
-
-              {scanError ? (
-                <div className="mt-4 rounded-md border border-critical-border bg-critical-soft p-3 text-sm text-critical">
-                  <div className="font-semibold">{scanError.title}</div>
-                  <p className="mt-1 leading-relaxed">{scanError.message}</p>
-                  {scanError.help ? (
-                    <p className="mt-2 text-[0.8rem] leading-relaxed text-critical/80">
-                      {scanError.help}
-                    </p>
-                  ) : null}
-                </div>
-              ) : null}
-            </div>
-          </Card>
-
-          <Card>
-            <CardHead>Read-only by design</CardHead>
-            <div className="p-4 pt-0">
-              <ul className="space-y-1.5 text-[0.8rem] leading-relaxed text-muted">
-                {[
-                  "No wallet connection",
-                  "No Safe SDK or API",
-                  "No transaction creation",
-                  "No backend database",
-                  "Local IndexedDB snapshots only",
-                ].map((item) => (
-                  <li key={item} className="relative pl-3.5">
-                    <span className="absolute top-[0.65em] left-0 h-1 w-1 rounded-full bg-rule-strong" />
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </Card>
-
-
-        </aside>
-
-        <main className="min-h-[560px]">
+      {hasOutput ? (
+        <main
+          id="report"
+          aria-live="polite"
+          className="mx-auto w-full max-w-[1200px] scroll-mt-20 px-5 py-8 lg:px-6"
+        >
           {result && !finalReport ? (
             <OwnerVerificationCard
               owners={result.snapshot.owners}
@@ -314,7 +320,7 @@ export function SafeInspectorApp() {
             />
           ) : finalReport ? (
             <>
-              <section className="mb-3 grid gap-3 md:grid-cols-[200px_1fr]">
+              <section className="mb-3 grid gap-3 md:grid-cols-[220px_1fr]">
                 <Card className="flex flex-col items-center justify-center gap-2 p-5 text-center">
                   <div className="text-[0.733rem] font-semibold tracking-[0.06em] text-muted-faint uppercase">
                     Security score
@@ -322,7 +328,7 @@ export function SafeInspectorApp() {
                   <ScoreRing score={finalReport.score} />
                   <div
                     className={cn(
-                      "inline-block rounded px-2.5 py-1.5 text-[0.733rem] font-semibold",
+                      "inline-block rounded-full px-3 py-1.5 text-[0.733rem] font-semibold",
                       scoreLabelClass(finalReport.score),
                     )}
                   >
@@ -345,6 +351,11 @@ export function SafeInspectorApp() {
                       {selectedChain?.name}
                     </strong>{" "}
                     · block {finalReport.snapshot.blockNumber.toString()}
+                  </div>
+                  <div className="mt-4 grid max-w-[420px] grid-cols-3 overflow-hidden rounded-[10px] border border-rule">
+                    <HeroStat label="Owners" value={heroOwners} />
+                    <HeroStat label="Threshold" value={heroThreshold} />
+                    <HeroStat label="Findings" value={heroFindings} />
                   </div>
                   <div className="mt-4 flex flex-wrap gap-2">
                     <Button
@@ -379,7 +390,7 @@ export function SafeInspectorApp() {
 
               <div className="grid items-start gap-3 lg:grid-cols-[180px_1fr]">
                 <nav
-                  className="glass-panel hidden flex-col gap-0.5 rounded-[12px] border p-2 lg:sticky lg:top-[4.25rem] lg:flex"
+                  className="glass-panel hidden flex-col gap-0.5 rounded-[12px] border p-2 lg:sticky lg:top-20 lg:flex"
                   aria-label="Report sections"
                 >
                   <SectionNavLink
@@ -562,20 +573,19 @@ export function SafeInspectorApp() {
               </div>
             </>
           ) : (
-            <EmptyReportPanel
-              scanning={scanMutation.isPending}
-              scanAddress={safeAddress}
-            />
+            <EmptyReportPanel scanning scanAddress={safeAddress} />
           )}
         </main>
-      </div>
-    </div>
+      ) : null}
+
+      {children}
+    </>
   );
 }
 
 function HeroStat({ label, value }: { label: string; value: string }) {
   return (
-    <div className="border-r border-rule bg-accent-soft px-4 py-3.5 text-center last:border-r-0">
+    <div className="border-r border-rule bg-background px-4 py-3 text-center last:border-r-0">
       <div className="text-[0.667rem] font-semibold tracking-[0.06em] text-muted-faint uppercase">
         {label}
       </div>

@@ -42,6 +42,14 @@ GOPLUS_APP_SECRET=your_app_secret
 These values must also be configured as Vercel environment variables in
 production. They are never sent to the browser.
 
+Canonical URLs, the sitemap, Open Graph tags and structured data are built from
+`NEXT_PUBLIC_SITE_URL`. Set it to the public URL the app is served from, with no
+trailing slash. It defaults to `https://www.quillaudits.com/multisig-inspector`.
+
+```text
+NEXT_PUBLIC_SITE_URL=https://www.quillaudits.com/multisig-inspector
+```
+
 ```bash
 npm install
 npm run dev

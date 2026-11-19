@@ -28,19 +28,19 @@ function verdictColor(verdict: HelpVerdict) {
   switch (verdict) {
     case "yes":
       return {
-        border: "border-l-success",
+        border: "border-l-success!",
         badge: "bg-success-soft text-success",
         dot: "bg-success",
       };
     case "partially":
       return {
-        border: "border-l-warning",
+        border: "border-l-warning!",
         badge: "bg-warning-soft text-warning",
         dot: "bg-warning",
       };
     case "no":
       return {
-        border: "border-l-muted",
+        border: "border-l-muted-faint!",
         badge: "bg-muted/10 text-muted",
         dot: "bg-muted",
       };
@@ -72,13 +72,23 @@ export function HacksTimeline() {
       setRunningLoss(next);
     };
 
-    const handle = window.setTimeout(onScroll, 0);
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onScroll, { passive: true });
+    // Coalesce scroll events to one measurement per frame.
+    let frame = 0;
+    const schedule = () => {
+      if (frame) return;
+      frame = window.requestAnimationFrame(() => {
+        frame = 0;
+        onScroll();
+      });
+    };
+
+    schedule();
+    window.addEventListener("scroll", schedule, { passive: true });
+    window.addEventListener("resize", schedule, { passive: true });
     return () => {
-      window.clearTimeout(handle);
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onScroll);
+      if (frame) window.cancelAnimationFrame(frame);
+      window.removeEventListener("scroll", schedule);
+      window.removeEventListener("resize", schedule);
     };
   }, []);
 
@@ -135,7 +145,7 @@ function IncidentCard({
       ref={ref}
       data-id={hack.id}
       className={cn(
-        "glass-panel relative rounded-2xl border-l-4 p-5 transition-all duration-300 hover:translate-x-1 lg:p-6",
+        "glass-panel relative border border-l-4 p-5 lg:p-6",
         colors.border,
       )}
     >
@@ -148,10 +158,10 @@ function IncidentCard({
 
       <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
         <div className="flex-1">
-          <time className="text-[0.7rem] font-bold uppercase tracking-[0.12em] text-muted-faint">
+          <time dateTime={hack.date} className="text-[0.7rem] font-bold uppercase tracking-[0.12em] text-muted-faint">
             {hack.date}
           </time>
-          <h2 className="mt-1 text-[1.4rem] font-bold leading-tight tracking-tight">
+          <h2 className="mt-1 text-[1.35rem] font-semibold leading-tight tracking-tight">
             {hack.name}
           </h2>
         </div>
@@ -209,7 +219,7 @@ function GriftCounter({
 
   return (
     <div className="fixed bottom-5 left-5 z-40 w-[min(16rem,calc(100vw-2.5rem))]">
-      <div className="glass-panel rounded-xl p-4 shadow-lg">
+      <div className="glass-panel border p-4 !shadow-[var(--shadow-pop)]">
         <div className="flex items-center gap-3">
           <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-critical-soft text-critical">
             <Flame className="h-4 w-4" />

@@ -262,17 +262,17 @@ function TransactionXRayAppContent({
   }
 
   return (
-    <div className="min-h-screen text-foreground">
+    <div className="text-foreground">
       <SiteHeader active="xray" />
-      <section className="page-enter border-b border-white/60">
-        <div className="mx-auto max-w-[1320px] px-5 py-8 lg:px-6">
+      <section className="hero-ink">
+        <div className="page-enter mx-auto max-w-[1200px] px-5 py-12 lg:px-6">
           <p className="eyebrow">Pre-signing review</p>
-          <h1 className="mt-2 text-3xl font-bold tracking-tight">Transaction <span className="text-accent">Inspector</span></h1>
-          <p className="mt-3 max-w-2xl text-sm leading-relaxed text-muted">Understand what a Safe transaction changes before anyone signs it. Decoding, hash verification, and reputation checks run locally by default.</p>
+          <h1 className="mt-3 max-w-[22ch] text-[clamp(1.9rem,4.2vw,2.9rem)] leading-[1.06] font-semibold tracking-[-0.03em] text-balance">Decode and verify a Safe transaction <span className="hero-accent">before signing</span></h1>
+          <p className="mt-4 max-w-2xl text-base leading-relaxed text-white/70">Transaction Inspector shows what a Safe transaction changes and recomputes its hash so you can match it against your signing device. Decoding, hash verification, and reputation checks run locally by default.</p>
         </div>
       </section>
-      <main className="page-enter-delay-2 mx-auto grid max-w-[1320px] items-start gap-5 px-5 py-5 lg:grid-cols-[390px_1fr] lg:px-6">
-        <aside className="space-y-3 lg:sticky lg:top-[4.5rem] lg:self-start">
+      <main className="page-enter page-enter-delay-1 mx-auto grid max-w-[1200px] items-start gap-5 px-5 py-8 lg:grid-cols-[390px_1fr] lg:px-6">
+        <aside className="space-y-3 lg:sticky lg:top-20 lg:self-start">
         <Card>
           <TabBar tabs={modeTabs} active={mode} onChange={switchMode} />
           <div className="p-4">
@@ -341,7 +341,7 @@ function TransactionXRayAppContent({
               />
           ) : (
             <div className="glass-panel flex min-h-[28rem] flex-col items-center justify-center gap-3 rounded-[12px] border px-6 py-10 text-center">
-              <div className="mb-1 grid h-14 w-14 place-items-center rounded-[12px] border border-dashed border-white/90 bg-white/70 text-muted-faint shadow-[inset_0_1px_0_rgba(255,255,255,0.95),0_8px_20px_rgba(16,61,211,0.08)]">
+              <div className="mb-1 grid h-14 w-14 place-items-center rounded-[12px] border border-dashed border-rule-strong bg-background text-muted-faint">
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden>
                   <path d="M4 7h16M4 12h10M4 17h14" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
                   <circle cx="18" cy="12" r="2" stroke="currentColor" strokeWidth="1.5" />
@@ -392,7 +392,7 @@ function LoadingPanel({ mode }: { mode: Mode }) {
       : "Decoding, verifying the hash, and scoring risk locally…";
   return (
     <div className="glass-panel flex min-h-[28rem] flex-col items-center justify-center gap-3 rounded-[12px] border px-6 py-10 text-center">
-      <div className="scan-orb mb-1 grid h-[4.5rem] w-[4.5rem] place-items-center rounded-full border-2 border-white/90 bg-white/70 text-accent shadow-[inset_0_1px_0_rgba(255,255,255,0.95),0_8px_20px_rgba(16,61,211,0.08)]">
+      <div className="scan-orb mb-1 grid h-[4.5rem] w-[4.5rem] place-items-center rounded-full border-2 border-rule bg-accent-soft text-accent">
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden>
           <path d="M4 6h16v12H4z" stroke="currentColor" strokeWidth="1.5" />
           <path d="M8 10h8M8 14h5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />

@@ -17,8 +17,8 @@ export function EmptyReportPanel({
 }: EmptyReportPanelProps) {
   if (scanning) {
     return (
-      <section className="glass-panel flex min-h-[28rem] flex-col items-center justify-center gap-3 rounded-[12px] border px-6 py-10 text-center">
-        <div className="scan-orb relative mb-1 grid h-[4.5rem] w-[4.5rem] place-items-center rounded-full border-2 border-white/90 bg-white/70 text-accent shadow-[inset_0_1px_0_rgba(255,255,255,0.95),0_8px_20px_rgba(16,61,211,0.08)]">
+      <section className="glass-panel flex min-h-[22rem] flex-col items-center justify-center gap-3 rounded-[12px] border px-6 py-10 text-center">
+        <div className="scan-orb relative mb-1 grid h-[4.5rem] w-[4.5rem] place-items-center rounded-full border-2 border-rule bg-accent-soft text-accent">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden>
             <circle cx="12" cy="12" r="3" stroke="currentColor" strokeWidth="1.5" />
             <path
@@ -45,11 +45,11 @@ export function EmptyReportPanel({
   }
 
   return (
-    <section className="glass-panel flex min-h-[28rem] flex-col items-center justify-center gap-3 rounded-[12px] border px-6 py-10 text-center">
+    <section className="glass-panel flex min-h-[22rem] flex-col items-center justify-center gap-3 rounded-[12px] border px-6 py-10 text-center">
       <div
         className={cn(
-          "mb-1 grid h-14 w-14 place-items-center rounded-[12px] border border-dashed border-white/90",
-          "bg-white/70 text-muted-faint shadow-[inset_0_1px_0_rgba(255,255,255,0.95),0_8px_20px_rgba(16,61,211,0.08)]",
+          "mb-1 grid h-14 w-14 place-items-center rounded-[12px] border border-dashed border-rule-strong",
+          "bg-background text-muted-faint",
         )}
       >
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden>
