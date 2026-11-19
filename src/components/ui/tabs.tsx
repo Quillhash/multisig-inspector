@@ -10,15 +10,15 @@ export function TabBar<T extends string>({
   onChange: (value: T) => void;
 }) {
   return (
-    <div className="border-b border-rule p-2" role="tablist">
+    <div className="flex gap-1 border-b border-rule p-2" role="tablist">
       {tabs.map((tab) => (
         <button
           key={tab.value}
           role="tab"
           aria-selected={active === tab.value}
           className={cn(
-            "rounded px-3 py-2 text-sm font-semibold whitespace-nowrap transition",
-            active === tab.value ? "bg-accent text-white" : "text-muted hover:text-foreground",
+            "h-10 rounded-full px-4 text-sm font-semibold whitespace-nowrap transition-colors",
+            active === tab.value ? "bg-surface text-foreground" : "text-muted hover:text-foreground",
           )}
           onClick={() => onChange(tab.value)}
         >

@@ -3,27 +3,29 @@ import { cn } from "@/lib/utils/cn";
 
 type ButtonVariant = "primary" | "secondary" | "ghost" | "danger";
 
+/**
+ * Brand button: always a fully round pill. Compact (40px) by default, which
+ * suits app screens; pass `size="lg"` for the 60px marketing size.
+ */
 export function Button({
   children,
   className,
   variant = "primary",
+  size = "sm",
   ...props
 }: ButtonHTMLAttributes<HTMLButtonElement> & {
   children: ReactNode;
   variant?: ButtonVariant;
+  size?: "sm" | "lg";
 }) {
   return (
     <button
       className={cn(
-        "inline-flex h-10 items-center justify-center gap-2 rounded-md px-4 text-sm font-semibold transition disabled:cursor-not-allowed disabled:opacity-50",
-        variant === "primary" &&
-          "bg-accent text-white hover:bg-accent-hover",
-        variant === "secondary" &&
-          "glass-btn-secondary border text-foreground",
-        variant === "ghost" &&
-          "border border-rule text-muted hover:bg-accent-soft",
+        "qa-btn gap-2",
+        size === "sm" && "qa-btn--sm",
+        (variant === "secondary" || variant === "ghost") && "qa-btn--glass",
         variant === "danger" &&
-          "border border-critical-border bg-critical-soft text-critical hover:bg-critical-soft/80",
+          "border border-critical-border bg-critical-soft text-critical hover:bg-critical-soft",
         className,
       )}
       {...props}

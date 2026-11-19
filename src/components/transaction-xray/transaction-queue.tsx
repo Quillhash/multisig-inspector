@@ -35,7 +35,7 @@ const sections: ReadonlyArray<{
     status: "awaiting",
     heading: "Awaiting signatures",
     empty: "No transaction is currently waiting for more signatures.",
-    chipClass: "border-[#fed7aa] bg-[#fff7ed] text-medium",
+    chipClass: "border-warning-border bg-warning-soft text-warning",
   },
   {
     status: "ready",
@@ -72,7 +72,7 @@ export function TransactionQueue({
 
   if (queue.view === "history") {
     return (
-      <div className="glass-panel rounded-[12px] border p-4 lg:p-5">
+      <div className="glass-panel rounded-3xl border p-4 lg:p-5">
         <div className="mb-3.5 flex flex-wrap items-start justify-between gap-3">
           <div>
             <h2 className="text-[0.9375rem] font-semibold tracking-tight">
@@ -115,7 +115,7 @@ export function TransactionQueue({
   }
 
   return (
-    <div className="glass-panel rounded-[12px] border p-4 lg:p-5">
+    <div className="glass-panel rounded-3xl border p-4 lg:p-5">
       <div className="mb-3.5 flex flex-wrap items-start justify-between gap-3">
         <div>
           <h2 className="text-[0.9375rem] font-semibold tracking-tight">
@@ -136,7 +136,7 @@ export function TransactionQueue({
         </Button>
       </div>
 
-      <div className="glass-chip mb-3.5 flex flex-wrap gap-x-5 gap-y-2 rounded-[12px] border px-4 py-3 text-[0.8125rem] text-muted">
+      <div className="glass-chip mb-3.5 flex flex-wrap gap-x-5 gap-y-2 rounded-3xl border px-4 py-3 text-[0.8125rem] text-muted">
         <span>
           Local drafts — <strong className="font-semibold text-foreground tabular-nums">0</strong>
         </span>
@@ -158,7 +158,7 @@ export function TransactionQueue({
         <QueueColumn
           heading="Local drafts"
           count={0}
-          chipClass="border-rule bg-white/60 text-muted"
+          chipClass="border-rule bg-surface text-muted"
         >
           <QueueEmpty>
             Unsigned Transaction Builder drafts stay in the creator&apos;s Safe
@@ -224,8 +224,8 @@ function QueueColumn({
   children: React.ReactNode;
 }) {
   return (
-    <section className="glass-chip flex min-h-[12rem] flex-col rounded-[12px] border">
-      <div className="flex items-center justify-between gap-2 border-b border-white/70 px-3 py-2.5">
+    <section className="glass-chip flex min-h-[12rem] flex-col rounded-3xl border">
+      <div className="flex items-center justify-between gap-2 border-b border-rule px-3 py-2.5">
         <h2 className="text-[0.75rem] font-semibold tracking-[0.04em] text-muted uppercase">
           {heading}
         </h2>
@@ -269,10 +269,10 @@ function TransactionRow({
   return (
     <button
       className={cn(
-        "flex w-full items-center gap-2.5 rounded-md border p-2.5 text-left transition focus-visible:border-accent focus-visible:ring-[3px] focus-visible:ring-accent/15 focus-visible:outline-none",
+        "flex w-full items-center gap-2.5 rounded-2xl border p-2.5 text-left transition focus-visible:border-accent focus-visible:ring-[3px] focus-visible:ring-accent/15 focus-visible:outline-none",
         selected
-          ? "border-accent bg-white/90 ring-2 ring-accent/15"
-          : "border-white/80 bg-white/70 hover:border-[color-mix(in_srgb,var(--accent)_35%,white)] hover:bg-white/90",
+          ? "border-accent bg-surface ring-2 ring-accent/15"
+          : "border-rule bg-surface hover:border-[color-mix(in_srgb,var(--accent)_45%,white)]",
       )}
       disabled={loading}
       onClick={() => onSelect(transaction)}
@@ -316,10 +316,10 @@ function ImportErrors({ items }: { items: PendingSafeTxItem[] }) {
         if (!isPendingSafeTxImportError(item)) return null;
         return (
           <div
-            className="rounded-md border border-medium/40 bg-warning-soft p-3 text-xs"
+            className="rounded-2xl border border-warning-border bg-warning-soft p-3 text-xs"
             key={`${item.safeTxHash ?? "invalid"}-${index}`}
           >
-            <div className="font-semibold text-medium">
+            <div className="font-semibold text-warning">
               Could not import{" "}
               {item.nonce !== undefined
                 ? `nonce ${item.nonce}`

@@ -14,7 +14,7 @@ export function Card({
     <section
       id={id}
       className={cn(
-        "glass-panel rounded-[12px] border",
+        "glass-panel border",
         className,
       )}
     >
@@ -25,7 +25,7 @@ export function Card({
 
 export function CardHead({ children }: { children: ReactNode }) {
   return (
-    <div className="px-4 pt-4 pb-0 text-[0.8rem] font-bold tracking-[0.06em] text-foreground uppercase">
+    <div className="px-4 pt-4 pb-0 text-[0.95rem] font-semibold tracking-tight text-foreground">
       {children}
     </div>
   );

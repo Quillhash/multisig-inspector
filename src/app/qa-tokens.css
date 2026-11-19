@@ -1,0 +1,1106 @@
+/*
+ * QuillAudits website tokens and base components.
+ *
+ * Values are measured from quillaudits.com (computed styles) and the
+ * QA Brand Guideline Figma file. Do not retint or round them.
+ *
+ * Fonts: load Chakra Petch 700 and Bai Jamjuree 400/500/600/700 yourself
+ * (next/font/google or Google Fonts) and point the two variables below at them.
+ * Plain CSS. With Tailwind v4, import this file into a layer so utilities
+ * can still override it:  @import "./tokens.css" layer(components);
+ * and map the variables in `@theme inline` (see SKILL.md).
+ *
+ * Sections: tokens, base, layout, type, hero, slabs, cards, buttons, nav,
+ * small parts, FAQ, zebra list, quote band, forms, severity, footer, a11y.
+ */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+:root {
+  /* ── Named brand palette (quillaudits.com/brandkit) ── */
+  --qa-core: #103dd3; /* Quill Core: primary actions, links, blue panels */
+  --qa-black: #161616; /* Ledger Black: headings, dark cards, icon circles */
+  --qa-slate: #f7f7f7; /* Clean Slate: page background */
+  --qa-sky: #28c6ff; /* Audit Sky: highlight on blue or black, hover gradient end */
+  --qa-pulse: #9e67ff; /* Protocol Pulse: eyebrow labels and promo pills only */
+
+  /* ── Working neutrals ── */
+  --qa-surface: #f2f2f2; /* light card, footer panel */
+  --qa-surface-nested: #e8e8e8; /* panel inside a card, chips */
+  --qa-white: #ffffff; /* white buttons, inputs, nav hover */
+  --qa-line: #dddddd; /* every 1px border and divider */
+  --qa-text: #161616; /* headings, bolded phrases */
+  --qa-text-body: #525252; /* body copy, at weight 500. The dominant text colour. */
+  --qa-text-strong: #333333; /* quotes, breadcrumb chip */
+  --qa-text-faint: #7a7a7a; /* micro-copy, captions, dates */
+  --qa-loss: #e53030; /* loss and danger numbers on light */
+  --qa-loss-on-dark: #cf0000;
+  --qa-dark-card: #292929; /* card on a Ledger Black section */
+  --qa-dark-line: #333333;
+  --qa-on-dark: #fffbff; /* headline text on blue or black */
+  --qa-on-dark-muted: #e8e8e8; /* subhead on blue or black */
+  --qa-on-core: #eeeeee; /* text on Quill Core and headings on dark sections */
+  --qa-on-dark-body: #dddddd; /* body on dark sections */
+  --qa-new: #ff0420; /* "NEW" tag only */
+
+  /* ── Audit severity. Fixed meanings, never decoration. ── */
+  --qa-sev-critical: #960028;
+  --qa-sev-high: #f12326;
+  --qa-sev-medium: #ff7428;
+  --qa-sev-low: #feb848;
+  --qa-sev-info: #9900ff; /* not the same purple as Protocol Pulse */
+
+  /* ── Shape ── */
+  --qa-radius-panel: 24px; /* cards, hero, footer, CTA panels */
+  --qa-radius-nested: 16px; /* a panel inside a card */
+  --qa-radius-control: 12px; /* inputs, selects, textareas */
+  --qa-radius-chip: 8px; /* chips, tags, breadcrumb */
+  --qa-radius-pill: 9999px; /* every button and the nav bar */
+
+  /* The inner highlight used on glass pills and the nav. Not a drop shadow. */
+  --qa-inner-highlight: inset -8px 8px 8px 0 #ffffff0f, inset 8px -8px 8px 0 #a8a8a80f;
+
+  /* ── Layout ── */
+  --qa-container: 1280px; /* max width including gutters, so a 1200px column */
+  --qa-gutter: 40px;
+  --qa-section-gap: 140px; /* top and bottom padding of a section */
+  --qa-frame: 8px; /* inset of full-bleed panels from the viewport edge */
+
+  /* ── Type ── */
+  --qa-font-display: var(--font-chakrapetch, "Chakra Petch"), system-ui, sans-serif;
+  --qa-font-body: var(--font-baijamjuree, "Bai Jamjuree"), system-ui, sans-serif;
+  --qa-font-mono: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+}
+
+@media (max-width: 1279px) {
+  :root {
+    --qa-gutter: 16px;
+  }
+}
+@media (max-width: 1023px) {
+  :root {
+    --qa-section-gap: 96px;
+  }
+}
+
+body {
+  margin: 0;
+  overflow-x: clip;
+  background: var(--qa-slate);
+  color: var(--qa-text-body);
+  font: 500 16px/24px var(--qa-font-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Layout helpers ── */
+.qa-container {
+  max-width: var(--qa-container);
+  margin-inline: auto;
+  padding-inline: var(--qa-gutter);
+}
+.qa-section {
+  padding-block: var(--qa-section-gap);
+}
+/* Left on desktop, centred below 1024px, as section heads are on the site. */
+@media (max-width: 1023px) {
+  .qa-center-mobile {
+    text-align: center;
+  }
+}
+.qa-narrow {
+  max-width: 905px;
+  margin-inline: auto;
+}
+/* Ledger Black section. Rounded top corners when it follows a light section. */
+.qa-section--dark {
+  background: var(--qa-black);
+  color: var(--qa-on-dark-body);
+  border-radius: var(--qa-radius-panel) var(--qa-radius-panel) 0 0;
+}
+.qa-section--dark .qa-h2,
+.qa-section--dark .qa-h3 {
+  color: var(--qa-on-core);
+}
+.qa-section--dark a:not([class]),
+.qa-link--on-dark {
+  color: #29c6ff;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+/* A light card placed on a dark section keeps its own dark headings. */
+.qa-section--dark .qa-card:not(.qa-card--dark) .qa-h3 {
+  color: var(--qa-text);
+}
+.qa-section--dark .qa-eyebrow {
+  color: var(--qa-sky);
+}
+.qa-section--dark .qa-small {
+  color: #9a9a9a;
+}
+.qa-section--dark .qa-faq__item {
+  border-color: var(--qa-dark-line);
+}
+.qa-section--dark .qa-faq__item > summary,
+.qa-section--dark .qa-btn--glass,
+.qa-section--dark .qa-pill {
+  color: var(--qa-on-core);
+}
+/* Inline links inside running text on light. */
+.qa-prose a {
+  color: var(--qa-core);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+/* Full-bleed rounded panel that leaves a thin Clean Slate frame around it. */
+.qa-panel {
+  margin-inline: var(--qa-frame);
+  border-radius: var(--qa-radius-panel);
+  overflow: hidden;
+}
+
+/* ── Type ── */
+/* Chakra Petch is for h1, h2, the hero eyebrow and card stats only. */
+.qa-h1 {
+  margin: 0;
+  color: var(--qa-text);
+  font: 700 clamp(30px, 4.4vw, 64px) / 1.15 var(--qa-font-display);
+  text-transform: uppercase;
+  text-wrap: balance;
+}
+/* Largest statement title (service pages): up to 80px. */
+.qa-h1--xl {
+  font-size: clamp(30px, 5.6vw, 80px);
+  line-height: 1.3;
+}
+/* Split product hero: smaller title beside a screenshot or the tool. */
+.qa-h1--product {
+  font-size: clamp(30px, 3.1vw, 44px);
+  line-height: 1.4;
+}
+.qa-h2 {
+  margin: 0;
+  color: var(--qa-text);
+  font: 700 clamp(28px, 2.8vw, 40px) / 1.3 var(--qa-font-display);
+  text-transform: uppercase;
+  text-wrap: balance;
+}
+.qa-h2--lg {
+  font-size: clamp(28px, 3.4vw, 48px);
+}
+.qa-accent {
+  color: var(--qa-core);
+}
+/* The statement in the blue CTA slab: Bai Jamjuree, not the display font. */
+.qa-statement {
+  margin: 0;
+  font: 700 clamp(40px, 4.2vw, 60px) / 1.25 var(--qa-font-body);
+  text-wrap: balance;
+}
+.qa-h3 {
+  margin: 0;
+  color: var(--qa-text);
+  font: 700 24px/32px var(--qa-font-body);
+}
+.qa-h3--lg {
+  font-size: clamp(24px, 2.3vw, 32px);
+  line-height: 1.5;
+  text-transform: uppercase;
+}
+.qa-lead {
+  margin: 0;
+  font: 500 clamp(17px, 1.4vw, 20px) / 1.4 var(--qa-font-body);
+}
+.qa-body-lg {
+  margin: 0;
+  font: 500 18px/28px var(--qa-font-body);
+}
+.qa-small {
+  margin: 0;
+  font: 500 14px/20px var(--qa-font-body);
+  color: var(--qa-text-faint);
+}
+.qa-eyebrow {
+  font: 700 14px/20px var(--qa-font-body);
+  text-transform: uppercase;
+  color: var(--qa-core);
+}
+.qa-eyebrow--hero {
+  font: 700 18px/28px var(--qa-font-display);
+}
+.qa-step-label {
+  font: 600 14px/20px var(--qa-font-body);
+  text-transform: uppercase;
+  color: var(--qa-pulse);
+}
+.qa-stat {
+  font: 700 40px/60px var(--qa-font-display);
+  color: var(--qa-text);
+}
+.qa-stat--loss {
+  color: var(--qa-loss);
+}
+@media (max-width: 1023px) {
+  .qa-stat {
+    font-size: 32px;
+    line-height: 48px;
+  }
+}
+/* Addresses and hashes must be able to wrap on a phone. */
+.qa-mono {
+  font-family: var(--qa-font-mono);
+  overflow-wrap: anywhere;
+}
+
+/* ── Panels ── */
+/* Light hero (default). Top padding clears the fixed nav. */
+.qa-hero {
+  padding-block: clamp(140px, 14vw, 190px) 96px;
+}
+/* When no logo wall follows the hero, use this so the gap to the next
+   section is not hero padding plus a full section padding. */
+.qa-hero--tight {
+  padding-bottom: 0;
+}
+/* Centred statement hero: a 960px column. */
+.qa-hero--center {
+  text-align: center;
+}
+.qa-hero--center > * {
+  max-width: 960px;
+  margin-inline: auto;
+}
+.qa-hero--center .qa-cta-row {
+  justify-content: center;
+}
+.qa-hero--split {
+  display: flex;
+  align-items: center;
+  gap: 48px;
+}
+.qa-hero--split > :first-child {
+  flex: 1 1 0;
+  max-width: 640px;
+}
+.qa-hero--split > :last-child {
+  flex: 1 1 0;
+  min-width: 0;
+}
+@media (max-width: 1023px) {
+  .qa-hero--split {
+    flex-direction: column;
+    text-align: center;
+  }
+  .qa-hero--split > * {
+    flex: none;
+    width: 100%;
+    max-width: none;
+  }
+}
+/* Trust line: short facts separated by thin rules. */
+.qa-trust {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  color: var(--qa-text-faint);
+  font: 500 14px/20px var(--qa-font-body);
+}
+.qa-trust > * + * {
+  padding-left: 16px;
+  border-left: 1px solid var(--qa-line);
+}
+.qa-trust strong {
+  color: var(--qa-text);
+  font-weight: 600;
+}
+.qa-hero--center .qa-trust {
+  justify-content: center;
+}
+@media (max-width: 1023px) {
+  .qa-trust {
+    justify-content: center;
+  }
+}
+/* CTA pair: primary first, glass secondary second, reassurance line under. */
+.qa-cta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+.qa-cta-row--center {
+  justify-content: center;
+}
+@media (max-width: 1023px) {
+  .qa-cta-row {
+    justify-content: center;
+  }
+  .qa-cta-row > * {
+    width: 100%;
+    justify-content: center;
+  }
+}
+/* Frame for a product screenshot or an embedded tool. */
+.qa-frame {
+  padding: 8px;
+  border: 1px solid var(--qa-line);
+  border-radius: var(--qa-radius-panel);
+  background: var(--qa-surface);
+}
+.qa-frame > * {
+  border-radius: var(--qa-radius-nested);
+}
+/* Image slab hero (blog, brand kit). Flat Quill Core is the fallback; add
+   background-image: url(/backgrounds/hero-streaks-blue.webp) when you ship it. */
+.qa-hero-slab {
+  border: 1px solid var(--qa-line);
+  padding: 96px var(--qa-gutter) 64px;
+  text-align: center;
+  color: var(--qa-on-dark);
+  background: var(--qa-core) center / cover no-repeat;
+}
+.qa-hero-slab .qa-h1 {
+  color: var(--qa-on-dark);
+}
+.qa-hero-slab .qa-lead {
+  color: var(--qa-on-dark-muted);
+}
+/* Blue CTA slab above the footer, with the Audit Sky strip on its bottom edge. */
+.qa-cta-panel {
+  position: relative;
+  isolation: isolate;
+  padding: 128px var(--qa-gutter);
+  text-align: center;
+  color: var(--qa-on-core);
+  background: var(--qa-core);
+  border-bottom: 32px solid var(--qa-sky);
+}
+@media (max-width: 1023px) {
+  .qa-cta-panel {
+    padding-block: 32px;
+  }
+}
+/* The dotted map is white glyphs on black. It must be blended over the blue,
+   never set as a plain background image (that turns the slab black).
+   Set --qa-cta-map: url(...) to the copied cta-dotted-map.webp. */
+.qa-cta-panel--map::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: var(--qa-cta-map) center / cover no-repeat;
+  opacity: 0.4;
+  mix-blend-mode: color-dodge;
+}
+
+/* ── Cards: flat, 1px line, 24px radius, never a drop shadow ── */
+.qa-card {
+  color: var(--qa-text-body);
+  background: var(--qa-surface);
+  border: 1px solid var(--qa-line);
+  border-radius: var(--qa-radius-panel);
+  padding: clamp(20px, 2.4vw, 32px);
+}
+/* Feature / comparison card: title, lead, checklist, button pinned to the bottom. */
+.qa-card--feature {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  background: var(--qa-surface-nested);
+}
+.qa-card--feature > .qa-btn:last-child {
+  margin-top: auto;
+}
+/* Floating label pill on a feature card. Add --highlight for the featured one. */
+.qa-card__label {
+  align-self: flex-start;
+  padding: 12px 16px;
+  border: 1px solid var(--qa-line);
+  border-radius: var(--qa-radius-pill);
+  background: var(--qa-white);
+  color: var(--qa-text);
+  font: 600 18px/1 var(--qa-font-body);
+}
+.qa-card__label--highlight {
+  border-color: #29c6ff;
+}
+/* Narrow card holding a .qa-stat and a label. Keep it at least 220px wide. */
+.qa-card--stat {
+  min-width: 220px;
+  padding: 40px 32px;
+}
+a.qa-card:hover {
+  background: #e7e7e7;
+}
+/* Card on a Ledger Black section. */
+.qa-card--dark {
+  background: var(--qa-dark-card);
+  border-color: var(--qa-dark-line);
+  color: var(--qa-on-dark-body);
+}
+.qa-card--dark:hover {
+  border-color: #555555;
+}
+.qa-card--dark .qa-h3 {
+  color: var(--qa-on-core);
+}
+.qa-card--dark .qa-card__inner {
+  background: var(--qa-black);
+}
+.qa-card__inner {
+  background: var(--qa-surface-nested);
+  border-radius: var(--qa-radius-nested);
+  padding: 20px 24px;
+}
+.qa-grid {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: minmax(0, 1fr);
+}
+/* .qa-grid--2: one column until 1024px, then two.
+   .qa-grid--3: two columns from 768px, three from 1024px.
+   .qa-grid--4: two columns from 768px, four from 1024px. */
+@media (min-width: 768px) {
+  .qa-grid--3,
+  .qa-grid--4 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (min-width: 1024px) {
+  .qa-grid--2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .qa-grid--3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .qa-grid--4 {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+/* ── Buttons: always fully round ── */
+.qa-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  height: 60px;
+  padding: 16px 28px;
+  border: 0;
+  border-radius: var(--qa-radius-pill);
+  background: var(--qa-core);
+  color: var(--qa-white);
+  font: 600 18px/28px var(--qa-font-body);
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+/* Flat at rest. The gradient appears on hover only. */
+.qa-btn:hover {
+  background: linear-gradient(180deg, #103dd3 -4.15%, #29c6ff 229.46%);
+}
+.qa-btn--sm {
+  height: 40px;
+  padding: 10px 20px;
+  font: 600 16px/20px var(--qa-font-body);
+}
+.qa-btn--white {
+  background: var(--qa-white);
+  color: var(--qa-black);
+}
+.qa-btn--white:hover {
+  background: #e9ecef;
+}
+/* Secondary: translucent grey glass. There is no outlined button. */
+.qa-btn--glass {
+  background: #7c7c7c0f;
+  color: var(--qa-black);
+  box-shadow: var(--qa-inner-highlight);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+}
+.qa-btn--glass:hover {
+  background: #7c7c7c1d;
+}
+.qa-btn--block {
+  width: 100%;
+}
+.qa-btn:disabled,
+.qa-btn[aria-disabled="true"] {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Icon pill: 56px, 40px circle on the leading side, 28px padding on the text side. */
+.qa-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  height: 56px;
+  padding: 8px 28px 8px 8px;
+  border: 0;
+  border-radius: var(--qa-radius-pill);
+  background: #7c7c7c0f;
+  color: var(--qa-black);
+  font: 600 18px/28px var(--qa-font-body);
+  text-decoration: none;
+  cursor: pointer;
+  box-shadow: var(--qa-inner-highlight);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  transition: background 0.3s ease;
+}
+.qa-pill--md {
+  height: 48px;
+  font-size: 16px;
+  line-height: 24px;
+}
+.qa-pill--md .qa-pill__icon {
+  width: 32px;
+  height: 32px;
+}
+.qa-pill:hover {
+  background: #7c7c7c1d;
+}
+.qa-pill__icon {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--qa-black);
+  color: #eeeeee;
+}
+.qa-pill__icon svg {
+  width: 16px;
+  height: 16px;
+}
+/* Solid white pill, for use on an image slab hero. */
+.qa-pill--white,
+.qa-pill--white:hover {
+  background: var(--qa-white);
+}
+/* Glass pill on a Quill Core panel. */
+.qa-pill--on-core {
+  background: #6680d288;
+  color: var(--qa-white);
+  box-shadow: inset 8px -8px 8px 0 #4d62c344;
+}
+.qa-pill--on-core:hover {
+  background: #6680d2aa;
+  outline: 1px solid #ffffff33;
+}
+.qa-pill--on-core .qa-pill__icon {
+  background: var(--qa-white);
+  color: var(--qa-black);
+}
+
+/* Text link with arrow. */
+.qa-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--qa-core);
+  font: 600 16px/1 var(--qa-font-body);
+  text-decoration: none;
+}
+.qa-link:hover {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+p .qa-link {
+  display: inline;
+  line-height: inherit;
+}
+
+/* ── Nav bar: a fixed frosted pill ── */
+.qa-nav {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  z-index: 50;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  width: min(1200px, calc(100% - 32px));
+  height: 72px;
+  padding: 14px 20px 14px 32px;
+  border-radius: var(--qa-radius-pill);
+  background: rgba(255, 255, 255, 0.75);
+  -webkit-backdrop-filter: blur(40px);
+  backdrop-filter: blur(40px);
+  box-shadow: var(--qa-inner-highlight);
+}
+.qa-nav__link {
+  display: inline-flex;
+  align-items: center;
+  height: 44px;
+  padding: 12px 16px;
+  border-radius: var(--qa-radius-pill);
+  color: var(--qa-black);
+  font: 500 16px/20px var(--qa-font-body);
+  text-decoration: none;
+}
+.qa-nav__link:hover,
+.qa-nav__link[aria-current="page"] {
+  background: var(--qa-white);
+}
+.qa-nav__links {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+/* 36px round menu button, shown below 1280px. */
+.qa-nav__menu {
+  display: none;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  padding: 6px;
+  border: 1px solid var(--qa-core);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--qa-core);
+  cursor: pointer;
+}
+.qa-nav__menu:hover {
+  background: #103dd333;
+}
+/* Sheet that opens under the nav on small screens. Toggle [hidden] or [open]. */
+.qa-nav__sheet {
+  position: fixed;
+  top: 88px;
+  left: 16px;
+  right: 16px;
+  z-index: 49;
+  display: grid;
+  gap: 4px;
+  padding: 12px;
+  border: 1px solid #dddddd99;
+  border-radius: 20px;
+  background: var(--qa-white);
+}
+.qa-nav__sheet[hidden] {
+  display: none;
+}
+.qa-nav__sheet .qa-nav__link {
+  height: 48px;
+  justify-content: flex-start;
+}
+.qa-nav__sheet .qa-nav__link:hover,
+.qa-nav__sheet .qa-nav__link[aria-current="page"] {
+  background: var(--qa-surface);
+}
+@media (max-width: 1279px) {
+  .qa-nav {
+    top: 16px;
+    height: 60px;
+    padding: 12px 16px 12px 20px;
+  }
+  /* The link row and the CTA button leave the pill; they live in the sheet. */
+  .qa-nav__links,
+  .qa-nav > .qa-btn {
+    display: none;
+  }
+  .qa-nav__menu {
+    display: grid;
+  }
+}
+@media (min-width: 1280px) {
+  .qa-nav__sheet {
+    display: none;
+  }
+}
+/* Breadcrumb row under the nav on inner pages. */
+.qa-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  color: var(--qa-text-body);
+  font: 500 14px/20px var(--qa-font-body);
+}
+
+/* ── Chips, tags, breadcrumb ── */
+.qa-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 8px;
+  border-radius: var(--qa-radius-chip);
+  background: var(--qa-surface-nested);
+  color: var(--qa-text-strong);
+  font: 500 14px/20px var(--qa-font-body);
+}
+/* Status tag on a dark section. */
+.qa-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 16px;
+  border: 1px solid #2e7d32;
+  border-radius: var(--qa-radius-pill);
+  background: #2e7d3226;
+  color: #7be495;
+  font: 600 14px/20px var(--qa-font-body);
+}
+.qa-tag--caution {
+  border-color: #b57a00;
+  background: #b57a0026;
+  color: #ffc960;
+}
+/* Checklist row. */
+.qa-check {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  font: 600 16px/24px var(--qa-font-body);
+}
+/* The site's own tick icon (assets/icons/tick.svg), inlined in Quill Core. */
+.qa-check::before {
+  content: "";
+  flex: none;
+  width: 24px;
+  height: 24px;
+  background: no-repeat center / contain
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23103DD3' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M16.1 12.6v5.6H4.8V7.1h8.4'/%3E%3Cpath d='M8.4 11.4l3 3 7.4-8.2'/%3E%3C/svg%3E");
+}
+/* On a dark section: solid green square, white tick, larger light text. */
+.qa-check--dark {
+  color: var(--qa-on-core);
+  font: 500 18px/24px var(--qa-font-body);
+}
+.qa-check--dark::before {
+  border-radius: 5px;
+  background: #2e7d32 no-repeat center / 14px
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14' fill='none' stroke='%23fff' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2.5 7.5l3 3 6-7'/%3E%3C/svg%3E");
+}
+/* FAQ: plain rows, no card. Use <details class="qa-faq__item">. */
+.qa-faq__item {
+  border-bottom: 1px solid var(--qa-line);
+}
+.qa-faq__item:last-child {
+  border-bottom: 0;
+}
+.qa-faq__item > summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 24px 0;
+  cursor: pointer;
+  list-style: none;
+  color: var(--qa-text);
+  font: 600 18px/28px var(--qa-font-body);
+}
+.qa-faq__item > summary::-webkit-details-marker {
+  display: none;
+}
+.qa-faq__item > summary::after {
+  content: "+";
+  flex: none;
+  font-size: 24px;
+  font-weight: 500;
+  transition: transform 0.2s ease;
+}
+.qa-faq__item[open] > summary::after {
+  transform: rotate(45deg);
+}
+.qa-faq__item > :not(summary) {
+  margin: 0;
+  padding-bottom: 16px;
+}
+/* Zebra list: the site's replacement for tables. */
+.qa-zebra {
+  border: 1px solid var(--qa-line);
+  border-radius: var(--qa-radius-panel);
+  overflow: hidden;
+}
+.qa-zebra__row {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 24px;
+  padding: 24px 32px;
+  background: var(--qa-surface);
+  font: 500 18px/28px var(--qa-font-body);
+}
+.qa-zebra__row:nth-child(even) {
+  background: var(--qa-white);
+}
+.qa-zebra__row > :first-child {
+  color: var(--qa-text);
+  font-weight: 700;
+}
+@media (max-width: 1023px) {
+  .qa-zebra__row {
+    grid-template-columns: 1fr;
+    gap: 8px;
+    padding: 20px;
+  }
+}
+/* Quote band: edge to edge, not an inset slab. Flat Quill Core is the fallback;
+   add background-image: url(.../quote-band-blue.webp) for the slanted quote marks. */
+.qa-quote {
+  padding: 96px var(--qa-gutter);
+  text-align: center;
+  color: var(--qa-on-dark);
+  background: var(--qa-core) center / cover no-repeat;
+}
+.qa-quote__text {
+  max-width: 1078px;
+  margin: 0 auto 32px;
+  font: 700 clamp(22px, 2.6vw, 36px) / 1.5 var(--qa-font-body);
+  text-transform: uppercase;
+  text-wrap: balance;
+}
+.qa-quote__name {
+  font: 600 24px/32px var(--qa-font-body);
+}
+.qa-quote__role {
+  color: var(--qa-on-dark-muted);
+  font: 500 16px/24px var(--qa-font-body);
+}
+.qa-promo {
+  display: inline-flex;
+  align-items: center;
+  height: 24px;
+  padding: 4px 12px;
+  border-radius: var(--qa-radius-pill);
+  background: var(--qa-pulse);
+  color: var(--qa-white);
+  font: 700 12px/16px var(--qa-font-body);
+}
+
+/* ── Form controls (tool pages). Not on the marketing site, derived from the system. ── */
+.qa-label {
+  display: block;
+  margin-bottom: 8px;
+  font: 600 14px/20px var(--qa-font-body);
+  color: var(--qa-text);
+}
+.qa-input {
+  width: 100%;
+  height: 56px;
+  padding: 0 20px;
+  border: 1px solid var(--qa-line);
+  border-radius: var(--qa-radius-control);
+  background: var(--qa-white);
+  color: var(--qa-text);
+  font: 500 16px/24px var(--qa-font-body);
+}
+.qa-input--mono {
+  font-family: var(--qa-font-mono);
+  font-size: 14px;
+}
+/* #525252 at 80% keeps the placeholder above 4.5:1 on white. */
+.qa-input::placeholder {
+  color: var(--qa-text-body);
+  opacity: 0.8;
+}
+select.qa-input {
+  appearance: none;
+  padding-right: 48px;
+  background: var(--qa-white) no-repeat right 20px center / 12px
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8' fill='none' stroke='%23161616' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M1 1.5l5 5 5-5'/%3E%3C/svg%3E");
+}
+textarea.qa-input {
+  height: auto;
+  min-height: 160px;
+  padding: 16px 20px;
+}
+/* A form grouped in one card: fields in a row on desktop, stacked on mobile. */
+.qa-form-row {
+  display: grid;
+  gap: 16px;
+  align-items: end;
+}
+@media (min-width: 1024px) {
+  .qa-form-row {
+    grid-template-columns: var(--qa-form-cols, 1fr auto);
+  }
+}
+.qa-input:hover {
+  border-color: #bdbdbd;
+}
+.qa-input:focus-visible {
+  outline: 2px solid var(--qa-core);
+  outline-offset: 1px;
+  border-color: var(--qa-core);
+}
+.qa-input[aria-invalid="true"] {
+  border-color: var(--qa-sev-high);
+}
+
+/* ── App and report parts (derived from the system for tool screens) ── */
+/* Score: a .qa-stat number, then an 8px track. Fill is Quill Core; the score's
+   meaning is carried by a text label next to it, not by severity colours. */
+.qa-meter {
+  height: 8px;
+  border-radius: var(--qa-radius-pill);
+  background: var(--qa-line);
+  overflow: hidden;
+}
+.qa-meter > * {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--qa-core);
+}
+/* A list of findings or results inside a card: rows split by 1px lines. */
+.qa-rows > * {
+  padding: 20px 0;
+  border-bottom: 1px solid var(--qa-line);
+}
+.qa-rows > :first-child {
+  padding-top: 0;
+}
+.qa-rows > :last-child {
+  padding-bottom: 0;
+  border-bottom: 0;
+}
+/* Compact key and value list for configuration data. */
+.qa-zebra--compact {
+  border-radius: var(--qa-radius-nested);
+}
+.qa-zebra--compact .qa-zebra__row {
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 16px;
+  padding: 12px 16px;
+  font-size: 14px;
+  line-height: 20px;
+}
+.qa-zebra--compact .qa-zebra__row > :first-child {
+  font-weight: 500;
+  color: var(--qa-text-body);
+}
+.qa-zebra--compact .qa-zebra__row > :last-child {
+  color: var(--qa-text);
+  font-weight: 600;
+  text-align: right;
+}
+/* Status tag on a light surface: same shape, darker text for contrast. */
+.qa-tag--light {
+  border-color: #2e7d32;
+  background: #2e7d321a;
+  color: #2e7d32;
+}
+.qa-tag--light.qa-tag--caution {
+  border-color: #b57a00;
+  background: #b57a001a;
+  color: #7a5200;
+}
+/* Skip link and anchor offset for the fixed nav. */
+.qa-skip {
+  position: absolute;
+  left: -9999px;
+}
+.qa-skip:focus {
+  left: 16px;
+  top: 16px;
+  z-index: 100;
+}
+[id] {
+  scroll-margin-top: 112px;
+}
+
+/* ── Severity ── */
+.qa-sev {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font: 600 16px/1 var(--qa-font-body);
+  color: var(--qa-text);
+}
+.qa-sev::before {
+  content: "";
+  width: 20px;
+  height: 20px;
+  border-radius: 5px;
+  background: var(--qa-sev-color, var(--qa-sev-info));
+}
+.qa-sev--critical { --qa-sev-color: var(--qa-sev-critical); }
+.qa-sev--high { --qa-sev-color: var(--qa-sev-high); }
+.qa-sev--medium { --qa-sev-color: var(--qa-sev-medium); }
+.qa-sev--low { --qa-sev-color: var(--qa-sev-low); }
+.qa-sev--info { --qa-sev-color: var(--qa-sev-info); }
+
+/* ── Footer panel with the dashed Quill Core outline ── */
+.qa-footer {
+  background: var(--qa-surface);
+  outline: 2px dashed var(--qa-core);
+  outline-offset: -2px;
+  padding-top: 32px;
+}
+.qa-footer__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 0 var(--qa-gutter) 32px;
+}
+.qa-footer__cols {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 32px 0;
+  padding: 0 var(--qa-gutter) 48px;
+}
+.qa-footer__col {
+  padding-left: 24px;
+  border-left: 1px solid var(--qa-line);
+}
+.qa-footer__col ul {
+  display: grid;
+  gap: 16px;
+  margin: 24px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.qa-footer__bottom {
+  padding: 20px var(--qa-gutter);
+  border-top: 1px solid var(--qa-line);
+  color: var(--qa-text-body);
+  font: 500 14px/20px var(--qa-font-body);
+}
+.qa-footer__title {
+  font: 700 20px/28px var(--qa-font-body);
+  text-transform: uppercase;
+  color: var(--qa-text);
+}
+.qa-footer__link {
+  font: 600 14px/20px var(--qa-font-body);
+  color: var(--qa-text-body);
+  text-decoration: none;
+}
+.qa-footer__link:hover {
+  color: var(--qa-core);
+}
+
+/* ── Accessibility ── */
+:focus-visible {
+  outline: 2px solid var(--qa-core);
+  outline-offset: 2px;
+}
+.qa-hero-slab :focus-visible,
+.qa-cta-panel :focus-visible,
+.qa-section--dark :focus-visible {
+  outline-color: var(--qa-white);
+}
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition: none !important;
+    animation: none !important;
+  }
+}
